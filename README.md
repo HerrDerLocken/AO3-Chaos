@@ -1,45 +1,45 @@
-# 🎰 AO3 Chaos Extension
+#  AO3 Chaos Extension
 
 A lovingly terrible browser extension that adds the **worst possible features** to Archive of Our Own.
 Inspired by the r/AO3 "worst possible AO3 features" meme post.
 
 ---
 
-## ✨ Features
+##  Features
 
-### 🎰 Slot Machine Gambling Ads
+###  Slot Machine Gambling Ads
 Three authentic-looking terrible banner ads injected into AO3 pages, each containing a working slot machine. Pull the lever — if you get three matching symbols, you win! (Prize: the satisfaction of winning a fake internet slot machine.)
 
-### 💎 Upgrade to Premium
+###  Upgrade to Premium
 Characters, Relationships, and Additional Tags are blurred out behind a **"Upgrade to Premium"** overlay. Click it → confirm "Buy" → premium unlocked permanently. The options page lets you reset it at any time.
 
-### 🏆 Trophy System
+### Trophy System
 Every fic gets a **"Give Trophy"** button. Awarded trophies get an "algorithm boost" (not real). View all your trophies in the nav bar under **"🏆 My Trophies"**, and manage them in the extension settings.
 
-### 📍 Reveal Author's Location
+###  Reveal Author's Location
 A button on every fic listing that dramatically scans, triangulates, and reveals the author's location (e.g., "Their Childhood Bedroom at 2am", "A Starbucks During Work Hours").
 
-### 🤖 AI Summarize
+###  AI Summarize
 An AI Summarize button on every fic that produces a hilariously vague AI summary like *"This story contains characters. Events occur. At least one person has feelings about this."*
 
-### 👍👎 Like / Dislike Buttons
+###  Like / Dislike Buttons
 Every fic gets Like and Dislike buttons with comically inflated fake counts (your personal votes are saved locally).
 
-### 🔞 Age Verification
+###  Age Verification
 Explicit-rated works require you to confirm you are 18+. If you click "No", you are redirected to the Teletubbies Wikipedia page. Once verified, you stay verified (or reset in settings).
 
-### 📚 Daily Reading Limit
+###  Daily Reading Limit
 You can only read **5 fics per day** before hitting the paywall. Premium removes the limit. Resets at midnight.
 
-### 🪪 Verify Your Name / 💵 Make $ with AO3
+###  Verify Your Name /  Make $ with AO3
 Two extra nav items: "Verify your name" (enter your legal name, get told it's been verified and "probably not" shared) and "Make $ with AO3" (apply to earn $0.00001 per kudos — response time: 3–5 business decades).
 
-### 🖼️ Author Face ID
+###  Author Face ID
 Individual work pages show a "Author Face ID" in the metadata with a randomly assigned face and a confidence percentage.
 
 ---
 
-## 🔧 Installation
+##  Installation
 
 ### Chrome / Chromium / Edge / Brave
 
@@ -63,7 +63,7 @@ Individual work pages show a "Author Face ID" in the metadata with a randomly as
 
 ---
 
-## ⚙️ Settings
+##  Settings
 
 Click the extension icon in your toolbar (or go to the extension's options) to:
 - See your Premium status and reset it
@@ -73,7 +73,7 @@ Click the extension icon in your toolbar (or go to the extension's options) to:
 
 ---
 
-## 📁 File Structure
+##  File Structure
 
 ```
 ao3-chaos-extension/
@@ -93,7 +93,7 @@ ao3-chaos-extension/
 
 ---
 
-## ⚠️ Disclaimer
+## ⚠️Disclaimer
 
 This is a **joke extension** for entertainment purposes. It does not:
 - Actually charge you money
@@ -106,4 +106,4 @@ AO3 is a wonderful nonprofit run by volunteers. Please support them at [ao3.org]
 
 ---
 
-*Made with 💾 and extremely poor taste*
+*Made with Chaos and extremely poor taste*
