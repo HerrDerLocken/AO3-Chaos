@@ -1,24 +1,109 @@
-# AO3-Chaos
-Making AO3 worse in every way
+# 🎰 AO3 Chaos Extension
 
+A lovingly terrible browser extension that adds the **worst possible features** to Archive of Our Own.
+Inspired by the r/AO3 "worst possible AO3 features" meme post.
 
-Any Data you give (because of the extension) will be stored locally in your browser and reset after restarting the Browser
+---
 
-# Installation
-You need to reinstall /readd the extension after restarting your browser
-## CHROME/EDGE/BRAVE/…
-Download and Extract: Download the extension and extract the files into a folder on your computer.
+## ✨ Features
 
-Open Extensions Page: Navigate to chrome://extensions in your address bar.
-Enable Developer Mode: Toggle the Developer mode switch in the top right corner.
+### 🎰 Slot Machine Gambling Ads
+Three authentic-looking terrible banner ads injected into AO3 pages, each containing a working slot machine. Pull the lever — if you get three matching symbols, you win! (Prize: the satisfaction of winning a fake internet slot machine.)
 
-Load Extension: Click Load unpacked in the top left.
-Select Folder: Select the folder containing your extracted extension files (ensure it contains the manifest.json file).
+### 💎 Upgrade to Premium
+Characters, Relationships, and Additional Tags are blurred out behind a **"Upgrade to Premium"** overlay. Click it → confirm "Buy" → premium unlocked permanently. The options page lets you reset it at any time.
 
-## Firefox:
-Download and Extract: Download the extension and extract the files into a folder on your computer.
+### 🏆 Trophy System
+Every fic gets a **"Give Trophy"** button. Awarded trophies get an "algorithm boost" (not real). View all your trophies in the nav bar under **"🏆 My Trophies"**, and manage them in the extension settings.
 
-Go to about:debugging#/runtime/this-firefox 
+### 📍 Reveal Author's Location
+A button on every fic listing that dramatically scans, triangulates, and reveals the author's location (e.g., "Their Childhood Bedroom at 2am", "A Starbucks During Work Hours").
 
-Click Load Temporary Add-on
-Select File: Select any file within the extension's folder (e.g., manifest.json). The extension will load and work until you restart Firefox
+### 🤖 AI Summarize
+An AI Summarize button on every fic that produces a hilariously vague AI summary like *"This story contains characters. Events occur. At least one person has feelings about this."*
+
+### 👍👎 Like / Dislike Buttons
+Every fic gets Like and Dislike buttons with comically inflated fake counts (your personal votes are saved locally).
+
+### 🔞 Age Verification
+Explicit-rated works require you to confirm you are 18+. If you click "No", you are redirected to the Teletubbies Wikipedia page. Once verified, you stay verified (or reset in settings).
+
+### 📚 Daily Reading Limit
+You can only read **5 fics per day** before hitting the paywall. Premium removes the limit. Resets at midnight.
+
+### 🪪 Verify Your Name / 💵 Make $ with AO3
+Two extra nav items: "Verify your name" (enter your legal name, get told it's been verified and "probably not" shared) and "Make $ with AO3" (apply to earn $0.00001 per kudos — response time: 3–5 business decades).
+
+### 🖼️ Author Face ID
+Individual work pages show a "Author Face ID" in the metadata with a randomly assigned face and a confidence percentage.
+
+---
+
+## 🔧 Installation
+
+### Chrome / Chromium / Edge / Brave
+
+1. **Rename** `manifest_chrome.json` → `manifest.json`
+2. Open `chrome://extensions/`
+3. Enable **Developer Mode** (top right toggle)
+4. Click **"Load unpacked"**
+5. Select the `ao3-chaos-extension` folder
+6. Visit [archiveofourown.org](https://archiveofourown.org) and enjoy the chaos
+
+### Firefox
+
+1. **Rename** `manifest_firefox.json` → `manifest.json`
+2. Open `about:debugging#/runtime/this-firefox`
+3. Click **"Load Temporary Add-on..."**
+4. Select the `manifest.json` file inside the `ao3-chaos-extension` folder
+5. Visit [archiveofourown.org](https://archiveofourown.org) and enjoy the chaos
+
+> **Note:** Temporary Firefox extensions are removed on browser restart.  
+> For a permanent install, you'd need to sign it via [AMO](https://addons.mozilla.org/en-US/developers/).
+
+---
+
+## ⚙️ Settings
+
+Click the extension icon in your toolbar (or go to the extension's options) to:
+- See your Premium status and reset it
+- View your reading stats for today
+- Browse all the trophies you've awarded (with links)
+- Nuke everything and start fresh
+
+---
+
+## 📁 File Structure
+
+```
+ao3-chaos-extension/
+├── manifest_chrome.json    ← Rename to manifest.json for Chrome
+├── manifest_firefox.json   ← Rename to manifest.json for Firefox
+├── content.js              ← All injected features
+├── content.css             ← All injected styles
+├── options.html            ← Settings page
+├── options.js              ← Settings page logic
+├── background.js           ← Storage bridge between content & options
+├── icons/
+│   ├── icon16.png
+│   ├── icon48.png
+│   └── icon128.png
+└── README.md
+```
+
+---
+
+## ⚠️ Disclaimer
+
+This is a **joke extension** for entertainment purposes. It does not:
+- Actually charge you money
+- Actually reveal anyone's location
+- Actually implement gambling
+- Actually share your name with anyone
+- Actually give fics an algorithm boost (as if AO3 has one)
+
+AO3 is a wonderful nonprofit run by volunteers. Please support them at [ao3.org](https://archiveofourown.org/donate).
+
+---
+
+*Made with 💾 and extremely poor taste*

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AO3 Chaos — Settings</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #1a0000;
+      color: #eee;
+      min-height: 100vh;
+      padding: 30px 20px;
+    }
+    .container { max-width: 560px; margin: 0 auto; }
+
+    header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    header .logo { font-size: 2.5rem; }
+    header h1 {
+      font-size: 1.6rem;
+      color: #FFD700;
+      text-shadow: 0 0 10px rgba(255,215,0,0.6);
+      margin: 6px 0 4px;
+    }
+    header p { color: rgba(255,255,255,0.5); font-size: 0.85rem; }
+
+    .card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,215,0,0.3);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 16px;
+    }
+    .card h2 {
+      font-size: 1rem;
+      color: #FFD700;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card p { font-size: 0.85rem; color: rgba(255,255,255,0.6); margin-bottom: 12px; }
+
+    .status-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .status-badge {
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: bold;
+    }
+    .status-premium { background: linear-gradient(135deg, #FFD700, #FFA500); color: #222; }
+    .status-plus    { background: linear-gradient(135deg, #2196F3, #1565C0); color: #fff; }
+    .status-free    { background: rgba(255,255,255,0.1); color: #aaa; border: 1px solid rgba(255,255,255,0.2); }
+
+    .stat-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      font-size: 0.88rem;
+    }
+    .stat-row:last-child { border-bottom: none; }
+    .stat-val { color: #FFD700; font-weight: bold; font-size: 1rem; }
+
+    button {
+      padding: 9px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+    button:hover { opacity: 0.85; transform: translateY(-1px); }
+    button:active { transform: translateY(1px); }
+
+    .btn-danger { background: #c0392b; color: #fff; }
+    .btn-warning { background: linear-gradient(135deg, #e67e22, #d35400); color: #fff; }
+    .btn-gold { background: linear-gradient(135deg, #FFD700, #FFA500); color: #222; }
+    .btn-ghost { background: transparent; border: 1.5px solid rgba(255,255,255,0.3); color: #ccc; }
+
+    #trophies-list {
+      list-style: none;
+      max-height: 200px;
+      overflow-y: auto;
+      margin-top: 8px;
+    }
+    #trophies-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      font-size: 0.83rem;
+      color: #ccc;
+    }
+    #trophies-list a { color: #FFD700; text-decoration: none; }
+    #trophies-list a:hover { text-decoration: underline; }
+    .trophy-date { color: rgba(255,255,255,0.35); font-size: 0.75rem; white-space: nowrap; margin-left: 8px; }
+
+    .empty-note { color: rgba(255,255,255,0.3); font-style: italic; font-size: 0.85rem; text-align: center; padding: 12px 0; }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #333;
+      color: #fff;
+      padding: 10px 22px;
+      border-radius: 24px;
+      font-size: 0.88rem;
+      transition: transform 0.3s ease;
+      z-index: 9999;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    footer {
+      text-align: center;
+      margin-top: 32px;
+      color: rgba(255,255,255,0.2);
+      font-size: 0.75rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">🎰</div>
+      <h1>AO3 Chaos Extension</h1>
+      <p>Settings & Status — This is not a real premium service. Please gamble responsibly.</p>
+    </header>
+
+    <!-- Tier Status -->
+    <div class="card">
+      <h2>💎 Subscription Tier</h2>
+      <div class="status-row">
+        <div>
+          <div id="tier-badge" class="status-badge status-free">Free Tier</div>
+          <p style="margin: 8px 0 0; font-size: 0.78rem;" id="tier-desc">All tags hidden. 5 fic/day limit. Escalation starts after 2 minutes.</p>
+        </div>
+        <button class="btn-warning" id="btn-reset-tier">Reset to Free</button>
+      </div>
+    </div>
+
+    <!-- Reading Stats -->
+    <div class="card">
+      <h2>📚 Reading Stats</h2>
+      <p>Fics read today (resets at midnight):</p>
+      <div class="stat-row">
+        <span>Today's reads</span>
+        <span class="stat-val" id="reads-today">—</span>
+      </div>
+      <div class="stat-row">
+        <span>Daily limit</span>
+        <span class="stat-val" id="reads-limit">—</span>
+      </div>
+      <div style="margin-top:12px">
+        <button class="btn-ghost" id="btn-reset-reads">Reset Today's Count</button>
+      </div>
+    </div>
+
+    <!-- Trophies -->
+    <div class="card">
+      <h2>🏆 My Trophies</h2>
+      <p id="trophy-count-desc">Works you've awarded a trophy to:</p>
+      <ul id="trophies-list"></ul>
+      <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
+        <button class="btn-danger" id="btn-clear-trophies">Clear All Trophies</button>
+      </div>
+    </div>
+
+    <!-- Nuclear Reset -->
+    <div class="card">
+      <h2>💣 Nuclear Reset</h2>
+      <p>Wipe everything — premium status, reading counts, trophies, votes, age verification. Start fresh.</p>
+      <button class="btn-danger" id="btn-nuclear">☢️ Reset Everything</button>
+    </div>
+
+    <footer>
+      AO3 Chaos Extension · Not affiliated with Archive of Our Own · Please support your local fan fiction archive
+    </footer>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="options.js"></script>
+</body>
+</html>

@@ -1,0 +1,449 @@
+/* ============================================================
+   AO3 CHAOS EXTENSION — content.css v3.0
+   ============================================================ */
+
+/* ---- BASE ---- */
+.ao3c-overlay, .ao3c-modal, .ao3c-ad-banner, .ao3c-btn,
+.ao3c-reel, .ao3c-trophy-btn, .ao3c-reveal-btn, .ao3c-ai-btn, .ao3c-like-wrap {
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.4;
+}
+
+/* ---- OVERLAY / MODAL ---- */
+.ao3c-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  background: rgba(0,0,0,0.78) !important;
+  z-index: 999999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 20px !important;
+}
+
+.ao3c-modal {
+  background: #fff !important;
+  border: 3px solid #900 !important;
+  border-radius: 10px !important;
+  padding: 32px !important;
+  max-width: 520px !important;
+  width: 100% !important;
+  max-height: 90vh !important;
+  overflow-y: auto !important;
+  text-align: center !important;
+  position: relative !important;
+  box-shadow: 0 8px 50px rgba(0,0,0,0.6) !important;
+  color: #222 !important;
+}
+
+.ao3c-modal h2 { margin: 0 0 14px !important; font-size: 1.4rem !important; color: #900 !important; }
+.ao3c-modal p  { margin: 8px 0 !important; font-size: 0.95rem !important; color: #333 !important; }
+.ao3c-big-icon { font-size: 3.5rem !important; display: block !important; margin-bottom: 10px !important; }
+
+/* ---- BUTTONS — exhaustive override of AO3's resets ---- */
+.ao3c-btn {
+  display: inline-block !important;
+  box-sizing: border-box !important;
+  padding: 12px 28px !important;
+  border-radius: 6px !important;
+  border: 2px solid transparent !important;
+  font-size: 0.97rem !important;
+  font-weight: bold !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+  line-height: 1.3 !important;
+  min-height: 44px !important;
+  min-width: 140px !important;
+  cursor: pointer !important;
+  pointer-events: all !important;
+  text-decoration: none !important;
+  margin: 6px 4px !important;
+  vertical-align: middle !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  transition: transform 0.1s, opacity 0.1s !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  position: relative !important;
+  z-index: 10000000 !important;
+}
+.ao3c-btn:hover  { opacity: 0.88 !important; transform: translateY(-1px) !important; }
+.ao3c-btn:active { transform: translateY(1px) !important; }
+
+.ao3c-btn-gold {
+  background: linear-gradient(135deg, #FFD700, #FFA500) !important;
+  color: #222 !important;
+  box-shadow: 0 3px 10px rgba(255,165,0,0.5) !important;
+}
+.ao3c-btn-ghost {
+  background: transparent !important;
+  border: 2px solid #bbb !important;
+  color: #555 !important;
+}
+.ao3c-btn-blue {
+  background: linear-gradient(135deg, #2196F3, #1565C0) !important;
+  color: #fff !important;
+  box-shadow: 0 3px 10px rgba(33,150,243,0.4) !important;
+}
+
+.ao3c-btn-row {
+  display: flex !important; gap: 10px !important; justify-content: center !important;
+  flex-wrap: wrap !important; margin-top: 18px !important;
+}
+
+.ao3c-fine-print { font-size: 0.72rem !important; color: #999 !important; margin-top: 10px !important; }
+.ao3c-input {
+  width: 100% !important; padding: 10px 12px !important; border: 2px solid #ddd !important;
+  border-radius: 5px !important; font-size: 0.95rem !important; margin: 12px 0 !important;
+  box-sizing: border-box !important;
+}
+.ao3c-input:focus { outline: none !important; border-color: #900 !important; }
+
+.ao3c-confetti-bg { font-size: 1.3rem !important; letter-spacing: 2px !important; margin-bottom: 8px !important; animation: ao3c-bounce 0.6s ease infinite alternate !important; }
+
+/* ---- READING LIMIT ---- */
+.ao3c-price-box {
+  background: #fff8e1 !important; border: 1px solid #FFD700 !important; border-radius: 6px !important;
+  padding: 10px 14px !important; margin: 14px 0 !important; font-size: 0.9rem !important;
+}
+.ao3c-payment-icons { margin-top: 6px !important; font-size: 0.8rem !important; color: #777 !important; }
+
+/* ---- TIER CARDS (buy popup) ---- */
+.ao3c-tier-cards {
+  display: flex !important; gap: 16px !important; justify-content: center !important;
+  flex-wrap: wrap !important; margin: 16px 0 !important;
+}
+.ao3c-tier-card {
+  border: 2px solid #ddd !important; border-radius: 10px !important; padding: 18px 20px !important;
+  min-width: 190px !important; max-width: 230px !important; flex: 1 !important; text-align: center !important;
+  position: relative !important;
+}
+.ao3c-tier-plus    { border-color: #2196F3 !important; }
+.ao3c-tier-premium { border-color: #FFD700 !important; background: #fffbea !important; }
+.ao3c-tier-name  { font-size: 1.1rem !important; font-weight: 900 !important; margin-bottom: 4px !important; color: #222 !important; }
+.ao3c-tier-price { font-size: 1.4rem !important; font-weight: 900 !important; color: #900 !important; margin-bottom: 10px !important; }
+.ao3c-tier-badge-pill {
+  position: absolute !important; top: -12px !important; left: 50% !important;
+  transform: translateX(-50%) !important; background: #FFD700 !important; color: #222 !important;
+  font-size: 0.7rem !important; font-weight: bold !important; padding: 2px 12px !important;
+  border-radius: 12px !important; white-space: nowrap !important;
+}
+.ao3c-perks {
+  list-style: none !important; padding: 0 !important; margin: 10px 0 14px !important; text-align: left !important;
+}
+.ao3c-perks li { padding: 3px 0 !important; font-size: 0.83rem !important; color: #444 !important; }
+
+.ao3c-price-big { font-size: 2.5rem !important; font-weight: 900 !important; color: #900 !important; margin: 12px 0 !important; }
+.ao3c-price-big span { font-size: 1rem !important; color: #777 !important; font-weight: normal !important; }
+
+/* ---- PREMIUM OVERLAY ---- */
+.ao3c-premium-ph {
+  display: list-item !important; list-style: none !important; margin: 2px 0 4px !important;
+}
+.ao3c-premium-cover {
+  position: absolute !important; inset: 0 !important;
+  background: rgba(255,255,255,0.85) !important;
+  z-index: 1 !important;
+}
+.ao3c-upgrade-btn {
+  box-sizing: border-box !important; display: inline-flex !important; align-items: center !important;
+  gap: 5px !important; background: linear-gradient(135deg, #FFD700, #FFA500) !important;
+  border: none !important; border-radius: 4px !important; padding: 5px 14px !important;
+  font-size: 0.8rem !important; font-family: Arial, Helvetica, sans-serif !important;
+  font-weight: bold !important; line-height: 1.4 !important; cursor: pointer !important;
+  pointer-events: all !important; color: #222 !important; white-space: nowrap !important;
+  appearance: none !important; -webkit-appearance: none !important;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.25) !important;
+  position: relative !important; z-index: 10 !important;
+}
+.ao3c-upgrade-btn:hover { opacity: 0.85 !important; }
+
+/* ---- TROPHY ---- */
+.ao3c-trophy-btn {
+  box-sizing: border-box !important; background: #f5f5f5 !important; border: 1.5px solid #ccc !important;
+  border-radius: 6px !important; padding: 7px 16px 9px !important; font-size: 0.85rem !important;
+  font-family: Arial, Helvetica, sans-serif !important; line-height: 1.8 !important;
+  height: auto !important; min-height: unset !important; max-height: none !important;
+  overflow: visible !important;
+  cursor: pointer !important; color: #555 !important; margin: 5px 0 !important;
+  display: inline-block !important; vertical-align: middle !important;
+  white-space: nowrap !important; appearance: none !important; -webkit-appearance: none !important;
+  transition: all 0.2s !important;
+}
+.ao3c-trophy-btn:hover { border-color: #FFD700 !important; background: #fff8e1 !important; }
+.ao3c-trophy-btn.ao3c-trophy-awarded {
+  background: linear-gradient(135deg, #FFD700, #FFA500) !important;
+  border-color: #cc8800 !important; color: #222 !important; font-weight: bold !important;
+}
+.ao3c-trophy-btn-large { padding: 9px 20px !important; font-size: 0.95rem !important; margin: 12px 0 !important; }
+.ao3c-trophy-note { font-size: 0.85rem !important; color: #555 !important; }
+.ao3c-trophies-modal { text-align: left !important; }
+.ao3c-trophies-modal h2 { text-align: center !important; }
+.ao3c-trophies-list { list-style: none !important; padding: 0 !important; margin: 12px 0 !important; max-height: 280px !important; overflow-y: auto !important; }
+.ao3c-trophies-list li { display: flex !important; justify-content: space-between !important; align-items: center !important; padding: 6px 0 !important; border-bottom: 1px solid #eee !important; font-size: 0.88rem !important; }
+.ao3c-trophy-link { color: #900 !important; text-decoration: none !important; }
+.ao3c-trophy-link:hover { text-decoration: underline !important; }
+.ao3c-trophy-date { color: #aaa !important; font-size: 0.78rem !important; white-space: nowrap !important; margin-left: 8px !important; }
+.ao3c-empty { color: #999 !important; font-style: italic !important; text-align: center !important; padding: 16px 0 !important; }
+.ao3c-badge { background: #900 !important; color: #fff !important; border-radius: 10px !important; padding: 1px 7px !important; font-size: 0.75rem !important; font-weight: bold !important; vertical-align: middle !important; }
+.ao3c-badge-large { font-size: 0.9rem !important; padding: 2px 10px !important; }
+
+/* ---- GAMBLING AD BANNERS ---- */
+.ao3c-ad-banner {
+  display: block !important; width: 100% !important; border-width: 2px !important;
+  border-style: solid !important; border-radius: 6px !important; overflow: hidden !important;
+  position: relative !important; margin: 10px 0 !important;
+}
+.ao3c-ad-gambling {
+  animation: ao3c-glow 2.5s ease-in-out infinite alternate !important;
+}
+@keyframes ao3c-glow {
+  from { box-shadow: 0 0 6px rgba(255,215,0,0.2); }
+  to   { box-shadow: 0 0 22px rgba(255,215,0,0.55); }
+}
+.ao3c-ad-tag { font-size: 0.62rem !important; padding: 2px 8px !important; text-align: right !important; background: rgba(0,0,0,0.2) !important; color: rgba(255,255,255,0.4) !important; letter-spacing: 0.5px !important; }
+.ao3c-ad-inner { display: flex !important; align-items: center !important; justify-content: space-between !important; padding: 10px 14px !important; gap: 12px !important; flex-wrap: wrap !important; }
+.ao3c-ad-text  { flex: 1 !important; min-width: 100px !important; }
+.ao3c-brand-name { font-size: 1.25rem !important; font-weight: 900 !important; letter-spacing: 1px !important; text-transform: uppercase !important; text-shadow: 0 0 8px currentColor !important; font-style: italic !important; }
+.ao3c-ad-tagline { font-size: 0.83rem !important; font-weight: bold !important; color: #fff !important; margin: 2px 0 !important; }
+.ao3c-ad-offer   { font-size: 0.88rem !important; font-weight: 900 !important; animation: ao3c-flash 1.2s ease-in-out infinite alternate !important; }
+@keyframes ao3c-flash { from { opacity: 1; } to { opacity: 0.6; } }
+.ao3c-ad-footer  { text-align: center !important; font-size: 0.58rem !important; color: rgba(255,255,255,0.3) !important; padding: 3px 8px 5px !important; background: rgba(0,0,0,0.25) !important; }
+
+/* ---- SLOT MACHINE ---- */
+.ao3c-slot-wrap  { display: flex !important; align-items: center !important; gap: 8px !important; flex-shrink: 0 !important; }
+.ao3c-slot-reels { display: flex !important; gap: 4px !important; }
+.ao3c-reel {
+  width: 56px !important; height: 56px !important; background: #000 !important;
+  border: 2px solid #FFD700 !important; border-radius: 4px !important;
+  display: flex !important; align-items: center !important; justify-content: center !important;
+  overflow: hidden !important; box-shadow: inset 0 2px 8px rgba(0,0,0,0.8) !important;
+}
+/* Brand-text reels: smaller font, tight lines */
+.ao3c-brand-reel {
+  font-size: 0.58rem !important; font-weight: 900 !important; color: #FFD700 !important;
+  text-align: center !important; line-height: 1.15 !important; letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+}
+.ao3c-reel.ao3c-spinning { animation: ao3c-reel-blur 0.07s linear infinite !important; }
+@keyframes ao3c-reel-blur { 0%,100% { filter: blur(0px); transform: translateY(0); } 50% { filter: blur(2px); transform: translateY(-3px); } }
+.ao3c-reel.ao3c-settled { animation: ao3c-settle 0.3s ease-out !important; }
+@keyframes ao3c-settle { 0% { transform: translateY(-8px); } 60% { transform: translateY(3px); } 100% { transform: translateY(0); } }
+.ao3c-lever-btn {
+  background: linear-gradient(180deg, #cc2200, #880000) !important; border: 2px solid #FFD700 !important;
+  border-radius: 8px !important; font-weight: 900 !important; font-size: 0.7rem !important;
+  padding: 8px 12px !important; text-align: center !important; text-transform: uppercase !important;
+  box-shadow: 0 3px 0 #440000 !important; transition: transform 0.1s, box-shadow 0.1s !important;
+  letter-spacing: 0.5px !important;
+}
+.ao3c-lever-btn:hover { transform: translateY(-2px) !important; }
+.ao3c-lever-btn:active, .ao3c-lever-btn.ao3c-pulling { transform: translateY(3px) !important; box-shadow: 0 0 0 #440000 !important; }
+.ao3c-lever-btn:disabled { opacity: 0.5 !important; cursor: not-allowed !important; }
+.ao3c-slot-result { text-align: center !important; min-width: 80px !important; font-size: 0.8rem !important; }
+.ao3c-win  { color: #FFD700 !important; font-weight: 900 !important; animation: ao3c-flash 0.3s ease infinite alternate !important; }
+.ao3c-miss { color: rgba(255,255,255,0.5) !important; font-style: italic !important; }
+
+/* ---- NORMAL ADS ---- */
+.ao3c-ad-normal { border-width: 1px !important; box-shadow: 0 1px 4px rgba(0,0,0,0.08) !important; }
+.ao3c-ad-normal .ao3c-ad-tag { background: transparent !important; color: #bbb !important; }
+.ao3c-normal-ad-inner { display: flex !important; align-items: center !important; gap: 12px !important; padding: 8px 14px 12px !important; flex-wrap: wrap !important; }
+.ao3c-normal-ad-icon { font-size: 2.2rem !important; flex-shrink: 0 !important; }
+.ao3c-normal-ad-copy { flex: 1 !important; min-width: 100px !important; }
+.ao3c-normal-ad-headline { font-size: 0.9rem !important; font-weight: bold !important; margin-bottom: 3px !important; }
+.ao3c-normal-ad-body    { font-size: 0.76rem !important; color: #777 !important; line-height: 1.3 !important; }
+.ao3c-normal-ad-cta { background: transparent !important; border-width: 1.5px !important; border-style: solid !important; border-radius: 4px !important; padding: 6px 13px !important; font-size: 0.8rem !important; font-weight: bold !important; flex-shrink: 0 !important; white-space: nowrap !important; }
+.ao3c-normal-ad-cta:hover { opacity: 0.75 !important; }
+
+/* ---- JACKPOT ---- */
+.ao3c-jackpot-popup h2 { color: #cc8800 !important; }
+.ao3c-jackpot-brand { font-size: 2rem !important; font-weight: 900 !important; color: #FFD700 !important; background: #1a0000 !important; padding: 8px 20px !important; border-radius: 6px !important; margin-bottom: 8px !important; display: inline-block !important; animation: ao3c-bounce 0.4s ease infinite alternate !important; }
+.ao3c-prize-box { background: #fff8e1 !important; border: 2px solid #FFD700 !important; border-radius: 6px !important; padding: 12px !important; margin: 12px 0 !important; font-size: 0.9rem !important; }
+
+/* ---- FLOATING STRIP ---- */
+.ao3c-floating-strip {
+  position: fixed !important; right: 0 !important; top: 50% !important;
+  transform: translateY(-50%) !important; z-index: 9999 !important;
+  display: flex !important; flex-direction: column !important; gap: 4px !important;
+}
+.ao3c-float-card { width: 68px !important; border-left-width: 2px !important; border-left-style: solid !important; border-right: none !important; border-top: none !important; border-bottom: none !important; padding: 5px 3px !important; text-align: center !important; border-radius: 4px 0 0 4px !important; box-shadow: -2px 2px 8px rgba(0,0,0,0.4) !important; font-family: Arial, Helvetica, sans-serif !important; }
+.ao3c-float-brand { font-size: 0.55rem !important; font-weight: 900 !important; text-transform: uppercase !important; margin-bottom: 2px !important; }
+.ao3c-float-reels { display: flex !important; justify-content: center !important; gap: 2px !important; margin-bottom: 3px !important; }
+.ao3c-float-reel { display: inline-block !important; width: 16px !important; height: 16px !important; background: rgba(0,0,0,0.5) !important; border-radius: 2px !important; line-height: 16px !important; text-align: center !important; }
+.ao3c-float-btn { background: transparent !important; border-width: 1px !important; border-style: solid !important; border-radius: 3px !important; padding: 2px 6px !important; font-size: 0.6rem !important; font-weight: bold !important; width: 100% !important; cursor: pointer !important; }
+.ao3c-float-btn:hover { opacity: 0.75 !important; }
+
+/* ---- AUTHOR FACE ID ---- */
+.ao3c-face-row { display: flex !important; flex-wrap: wrap !important; margin: 6px 0 !important; }
+.ao3c-face-dt { font-weight: bold !important; color: #555 !important; font-size: 0.85rem !important; min-width: 120px !important; padding-right: 8px !important; }
+.ao3c-face-dd { display: flex !important; align-items: center !important; gap: 8px !important; }
+.ao3c-face-box { position: relative !important; display: inline-block !important; }
+.ao3c-face-img { width: 56px !important; height: 56px !important; border-radius: 4px !important; object-fit: cover !important; border: 2px solid #900 !important; }
+.ao3c-face-badge { position: absolute !important; bottom: 0 !important; left: 0 !important; right: 0 !important; background: rgba(0,120,0,0.85) !important; color: #fff !important; font-size: 0.52rem !important; font-weight: bold !important; text-align: center !important; padding: 1px 0 !important; }
+.ao3c-face-note { font-size: 0.78rem !important; color: #777 !important; }
+
+/* ---- REVEAL LOCATION BUTTON ---- */
+.ao3c-reveal-btn {
+  box-sizing: border-box !important; background: transparent !important; border: 1.5px solid #900 !important;
+  border-radius: 5px !important; color: #900 !important; font-size: 0.83rem !important;
+  font-family: Arial, Helvetica, sans-serif !important; line-height: 1.8 !important;
+  padding: 6px 14px 8px !important; cursor: pointer !important; margin: 5px 0 !important;
+  height: auto !important; min-height: unset !important; max-height: none !important;
+  overflow: visible !important;
+  display: block !important; white-space: nowrap !important;
+  appearance: none !important; -webkit-appearance: none !important;
+}
+.ao3c-reveal-btn:hover { background: #fff0f0 !important; }
+.ao3c-reveal-btn-lg { font-size: 0.9rem !important; padding: 8px 18px 10px !important; margin: 8px 0 !important; }
+
+/* ---- LOCATION POPUP ---- */
+.ao3c-location-popup { min-height: 180px !important; }
+.ao3c-scanning-phase { text-align: center !important; padding: 20px 0 !important; }
+.ao3c-scan-icon { font-size: 3rem !important; animation: ao3c-spin360 1.5s linear infinite !important; display: block !important; margin-bottom: 10px !important; }
+.ao3c-scan-text { font-size: 0.82rem !important; color: #555 !important; line-height: 2 !important; }
+.ao3c-scan-bar { height: 8px !important; background: #eee !important; border-radius: 4px !important; margin: 12px auto !important; max-width: 200px !important; overflow: hidden !important; }
+.ao3c-scan-fill { height: 100% !important; background: #900 !important; border-radius: 4px !important; animation: ao3c-fillup 2.2s ease-out forwards !important; }
+@keyframes ao3c-fillup { from { width: 0 } to { width: 100% } }
+@keyframes ao3c-spin360 { to { transform: rotate(360deg); } }
+.ao3c-location-name { font-size: 1.3rem !important; font-weight: bold !important; color: #900 !important; margin: 10px 0 !important; }
+.ao3c-fake-map { width: 220px !important; height: 110px !important; background: linear-gradient(135deg, #d4e6b5, #b8d498, #9ec47a) !important; border: 2px solid #ccc !important; border-radius: 6px !important; margin: 12px auto !important; position: relative !important; overflow: hidden !important; }
+.ao3c-map-grid { position: absolute !important; inset: 0 !important; background-image: linear-gradient(rgba(255,255,255,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.3) 1px, transparent 1px) !important; background-size: 20px 20px !important; }
+.ao3c-map-pin { position: absolute !important; top: 40% !important; left: 50% !important; transform: translate(-50%,-50%) !important; font-size: 2rem !important; animation: ao3c-bounce 0.5s ease infinite alternate !important; }
+.ao3c-coords { font-size: 0.75rem !important; color: #888 !important; margin-top: 6px !important; }
+
+/* ---- AI SUMMARIZE ---- */
+.ao3c-ai-btn {
+  background: linear-gradient(135deg, #667eea, #764ba2) !important; border: none !important;
+  border-radius: 5px !important; color: #fff !important; font-size: 0.82rem !important;
+  padding: 6px 14px 8px !important; cursor: pointer !important; margin: 5px 0 !important;
+  height: auto !important; min-height: unset !important; max-height: none !important;
+  overflow: visible !important; line-height: 1.8 !important;
+  display: block !important; font-family: Arial, Helvetica, sans-serif !important;
+  appearance: none !important; -webkit-appearance: none !important;
+}
+.ao3c-ai-btn:hover { opacity: 0.85 !important; }
+.ao3c-ai-btn.ao3c-ai-done {
+  background: #f0f0f0 !important; color: #444 !important; border: 1px solid #ddd !important;
+  font-size: 0.78rem !important; padding: 7px 14px 9px !important; max-width: 420px !important;
+  text-align: left !important; cursor: default !important; white-space: normal !important;
+  line-height: 1.5 !important;
+}
+
+/* ---- LIKE / DISLIKE ---- */
+.ao3c-like-wrap { display: flex !important; gap: 6px !important; margin: 5px 0 !important; flex-wrap: wrap !important; }
+.ao3c-like-btn, .ao3c-dislike-btn {
+  background: #f5f5f5 !important; border: 1.5px solid #ddd !important; border-radius: 20px !important;
+  padding: 5px 12px 6px !important; font-size: 0.83rem !important; cursor: pointer !important;
+  color: #555 !important; transition: all 0.2s !important; white-space: nowrap !important;
+  font-family: Arial, Helvetica, sans-serif !important; appearance: none !important;
+  height: auto !important; overflow: visible !important; line-height: 1.6 !important;
+}
+.ao3c-like-btn:hover    { border-color: #4caf50 !important; background: #f0fff0 !important; }
+.ao3c-dislike-btn:hover { border-color: #f44336 !important; background: #fff0f0 !important; }
+.ao3c-like-btn.ao3c-voted    { background: #e8f5e9 !important; border-color: #4caf50 !important; font-weight: bold !important; color: #2e7d32 !important; }
+.ao3c-dislike-btn.ao3c-voted { background: #ffebee !important; border-color: #f44336 !important; font-weight: bold !important; color: #c62828 !important; }
+
+/* ---- AGE VERIFY ---- */
+.ao3c-age-subtext { font-size: 1.05rem !important; font-weight: bold !important; margin: 16px 0 8px !important; }
+
+/* ---- NAV ITEMS ---- */
+.ao3c-nav-money  a { color: #2e7d32 !important; font-weight: bold !important; }
+.ao3c-nav-verify a { color: #0d47a1 !important; }
+.ao3c-nav-trophies a { color: #cc8800 !important; }
+.ao3c-nav-tier   a { color: #555 !important; font-weight: bold !important; }
+
+/* ---- MONEY POPUP ---- */
+.ao3c-money-list { list-style: none !important; text-align: left !important; padding: 0 !important; margin: 12px auto !important; max-width: 280px !important; }
+.ao3c-money-list li { padding: 4px 0 !important; font-size: 0.88rem !important; }
+
+/* ---- ENGAGEMENT FARMING ---- */
+/* Inserted as first child of li.work.blurb with float:right
+   so it appears at the top-right corner of every work card */
+.ao3c-engagement {
+  float: right !important;
+  clear: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  gap: 4px !important;
+  margin: 0 0 6px 12px !important;
+  max-width: 280px !important;
+}
+.ao3c-trending-badge {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a24) !important; color: #fff !important;
+  font-size: 0.72rem !important; font-weight: bold !important; padding: 2px 8px !important;
+  border-radius: 10px !important; white-space: nowrap !important;
+}
+.ao3c-also-read {
+  font-size: 0.72rem !important; color: #666 !important; font-style: italic !important;
+}
+.ao3c-commenter-badge {
+  font-size: 0.72rem !important; color: #555 !important; background: #f0f0f0 !important;
+  padding: 2px 8px !important; border-radius: 10px !important; border: 1px solid #ddd !important;
+}
+
+/* ---- SPONSORED TAGS ---- */
+.ao3c-sponsored-tag a {
+  color: #c0392b !important; font-weight: bold !important; font-size: 0.78rem !important;
+  background: #fff0ee !important; padding: 1px 5px !important; border-radius: 3px !important;
+  border: 1px solid #f1c0bb !important; text-decoration: none !important;
+}
+.ao3c-sponsored-tag a:hover { text-decoration: underline !important; }
+
+/* ---- CAPTCHA ---- */
+.ao3c-captcha-wrap { text-align: center !important; }
+.ao3c-captcha-grid {
+  display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 6px !important;
+  max-width: 240px !important; margin: 14px auto !important;
+}
+.ao3c-captcha-cell {
+  font-size: 2rem !important; padding: 8px !important; border: 2px solid #ddd !important;
+  border-radius: 6px !important; cursor: pointer !important; transition: all 0.15s !important;
+  background: #fafafa !important; user-select: none !important;
+}
+.ao3c-captcha-cell:hover { border-color: #999 !important; background: #f0f0f0 !important; }
+.ao3c-captcha-cell.ao3c-captcha-selected { border-color: #900 !important; background: #ffe0e0 !important; box-shadow: 0 0 0 2px rgba(150,0,0,0.3) !important; }
+.ao3c-captcha-hint { font-size: 0.78rem !important; color: #888 !important; margin-bottom: 0 !important; }
+.ao3c-captcha-msg { font-size: 0.85rem !important; font-weight: bold !important; margin-top: 10px !important; min-height: 1.2em !important; }
+
+/* ---- ESCALATION: COMIC SANS JITTER ---- */
+@keyframes ao3c-jitter {
+  0%   { transform: translateX(0px);   }
+  25%  { transform: translateX(0.6px); }
+  50%  { transform: translateX(0px);   }
+  75%  { transform: translateX(-0.6px);}
+  100% { transform: translateX(0px);   }
+}
+
+/* ---- ESCALATION: SCROLL TOAST ---- */
+.ao3c-scroll-toast {
+  position: fixed !important; bottom: 24px !important; left: 50% !important;
+  transform: translateX(-50%) translateY(60px) !important; background: #1a0000 !important;
+  color: #FFD700 !important; padding: 12px 24px !important; border-radius: 24px !important;
+  font-size: 0.88rem !important; font-family: Arial, Helvetica, sans-serif !important;
+  z-index: 999998 !important; border: 1px solid #FFD700 !important;
+  transition: transform 0.35s ease !important; white-space: nowrap !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5) !important;
+}
+.ao3c-scroll-toast.ao3c-toast-show { transform: translateX(-50%) translateY(0) !important; }
+
+/* ---- ESCALATION: TYPING DELAY ---- */
+.ao3c-typing-loader {
+  display: flex !important; align-items: center !important; gap: 10px !important;
+  padding: 16px !important; color: #666 !important; font-size: 0.9rem !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+.ao3c-typing-dots { display: flex !important; gap: 4px !important; }
+.ao3c-typing-dots span {
+  width: 8px !important; height: 8px !important; background: #900 !important;
+  border-radius: 50% !important; display: inline-block !important;
+  animation: ao3c-dot-bounce 1.2s ease-in-out infinite !important;
+}
+.ao3c-typing-dots span:nth-child(2) { animation-delay: 0.2s !important; }
+.ao3c-typing-dots span:nth-child(3) { animation-delay: 0.4s !important; }
+@keyframes ao3c-dot-bounce { 0%,80%,100% { transform: scale(0.8); opacity: 0.5; } 40% { transform: scale(1.2); opacity: 1; } }
+
+.ao3c-para-reveal { animation: ao3c-fadein 0.4s ease-out !important; }
+@keyframes ao3c-fadein { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+/* ---- SHARED ANIMATIONS ---- */
+@keyframes ao3c-bounce { from { transform: translateY(0); } to { transform: translateY(-5px); } }
