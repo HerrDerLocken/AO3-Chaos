@@ -1,0 +1,64 @@
+{
+  "manifest_version": 2,
+  "name": "AO3 Chaos Extension",
+  "description": "A lovingly terrible set of fake features for Archive of Our Own. Gambling ads, premium paywalls, slot machines, trophies, and more.",
+  "version": "1.0.0",
+  "author": "A Fan Fiction Enjoyer",
+
+  "permissions": [
+    "storage",
+    "tabs",
+    "activeTab",
+    "*://archiveofourown.org/*",
+    "*://*.archiveofourown.org/*",
+    "*://transformativeworks.org/*",
+    "*://*.transformativeworks.org/*"
+  ],
+
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+
+  "content_scripts": [
+    {
+      "matches": [
+        "*://archiveofourown.org/*",
+        "*://*.archiveofourown.org/*",
+        "*://transformativeworks.org/*",
+        "*://*.transformativeworks.org/*"
+      ],
+      "css": ["content.css"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ],
+
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+
+  "browser_action": {
+    "default_title": "AO3 Chaos",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_popup": "options.html"
+  },
+
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "ao3chaos@extension",
+      "strict_min_version": "109.0"
+    }
+  }
+}
