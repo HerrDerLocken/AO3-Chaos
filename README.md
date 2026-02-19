@@ -4,9 +4,9 @@ Making AO3 worse in every way
 
 Any Data you give (because of the extension) will be stored locally in your browser and reset after restarting the Browser
 
-## Installation
+# Installation
 You need to reinstall /readd the extension after restarting your browser
-# CHROME/EDGE/BRAVE/…
+## CHROME/EDGE/BRAVE/…
 Download and Extract: Download the extension and extract the files into a folder on your computer.
 
 Open Extensions Page: Navigate to chrome://extensions in your address bar.
@@ -15,7 +15,7 @@ Enable Developer Mode: Toggle the Developer mode switch in the top right corner.
 Load Extension: Click Load unpacked in the top left.
 Select Folder: Select the folder containing your extracted extension files (ensure it contains the manifest.json file).
 
-# Firefox:
+## Firefox:
 Download and Extract: Download the extension and extract the files into a folder on your computer.
 
 Go to about:debugging#/runtime/this-firefox 
