@@ -2,9 +2,10 @@
 
 A lovingly terrible browser extension that adds the **worst possible features** to Archive of Our Own.
 Inspired by the r/AO3 "worst possible AO3 features" meme post.
-
-
+<details>
+<summary>Spoiler warning (Image inside)</summary>
 ![Couldn't load Image](SpoilerImage.png)
+</details>
 ---
 
 ##  Features
