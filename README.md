@@ -4,7 +4,7 @@ A lovingly terrible browser extension that adds the **worst possible features** 
 Inspired by the r/AO3 "worst possible AO3 features" meme post.
 <details>
 <summary>Spoiler warning (Image inside)</summary>
-![Couldn't load Image](SpoilerImage.png)
+![Couldn't load Image](https://github.com/HerrDerLocken/AO3-Chaos/blob/main/SpoilerImage.png)
 </details>
 ---
 
