@@ -359,7 +359,7 @@
 
   function addTrophyButtons() {
     document.querySelectorAll('li.work.blurb').forEach(work => {
-      const workId  = work.id.replace('work-', '');
+      const workId  = work.id.replace('work_', '');
       const titleEl = work.querySelector('h4.heading a, h3.title a');
       if (!titleEl || work.querySelector('.ao3c-trophy-btn')) return;
       const title   = titleEl.textContent.trim();
