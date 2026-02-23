@@ -359,7 +359,7 @@
 
   function addTrophyButtons() {
     document.querySelectorAll('li.work.blurb').forEach(work => {
-      const workId  = work.id.replace('work_', '');
+      const workId  = work.id.replace(/^work[_-]/, '');
       const titleEl = work.querySelector('h4.heading a, h3.title a');
       if (!titleEl || work.querySelector('.ao3c-trophy-btn')) return;
       const title   = titleEl.textContent.trim();
@@ -850,7 +850,7 @@
   function addLikeDislikeButtons() {
     document.querySelectorAll('li.work.blurb').forEach((work, i) => {
       if (work.querySelector('.ao3c-like-wrap')) return;
-      const workId   = work.id.replace('work-', '');
+      const workId   = work.id.replace(/^work[_-]/, '');
       const s        = getStore();
       const liked    = !!(s.likes    || {})[workId];
       const disliked = !!(s.dislikes || {})[workId];
@@ -914,8 +914,10 @@
         <span class="ao3c-also-read">${READERS_ALSO[i % READERS_ALSO.length]}</span>
         ${i % 4 === 0 ? `<span class="ao3c-commenter-badge">💬 Top Commenter Badge <span class="ao3c-badge">${isPlus() ? 'UNLOCKED' : 'Plus Only'}</span></span>` : ''}
       `;
-      // Insert as FIRST child of the li so float:right puts it at top-right of the card
-      work.insertBefore(wrap, work.firstChild);
+      // Use absolute positioning so the engagement badges don't push any content down.
+      // The li.work.blurb gets position:relative via CSS.
+      work.style.setProperty('position', 'relative', 'important');
+      work.appendChild(wrap); // append at end so it doesn't disrupt DOM order
     });
   }
 
@@ -1169,6 +1171,233 @@
   }
 
   // ============================================================
+  // "DID YOU MEAN?" — fake alternate title suggestion
+  // ============================================================
+
+  const DID_YOU_MEAN = [
+    t => `${t} (But Make It Worse)`,
+    t => `${t} — Director's Regret Cut`,
+    t => `I Can't Believe It's Not ${t}`,
+    t => `${t} (And Other Lies I Tell Myself)`,
+    t => `The One Where ${t} Happens`,
+    t => `${t}: An Apology`,
+    t => `${t} II: Electric Boogaloo`,
+    t => `${t} (my therapist told me not to post this)`,
+    t => `${t}: A Study in Poor Decisions`,
+    t => `okay so what if ${t} but sad`,
+    t => `${t} (I was normal before this fandom)`,
+    t => `${t} [ABANDONED 2019] [REVIVED 2024] [ABANDONED AGAIN]`,
+    t => `${t}: The Unauthorized Self-Insert`,
+    t => `${t} except everyone is tired and nothing resolves`,
+    t => `${t} (please don't tag me in this)`,
+  ];
+
+  function addDidYouMean() {
+    document.querySelectorAll('li.work.blurb').forEach((work, i) => {
+      if (work.querySelector('.ao3c-dym')) return;
+      const titleEl = work.querySelector('h4.heading a:first-child, h3.title a:first-child');
+      if (!titleEl) return;
+      const title = titleEl.textContent.trim();
+      const fn    = DID_YOU_MEAN[i % DID_YOU_MEAN.length];
+      const suggestion = fn(title);
+      const wrap = el('p', 'ao3c-dym');
+      wrap.innerHTML = `Did you mean: <a class="ao3c-dym-link" href="${titleEl.href}" title="(not a real title)">"${suggestion}"</a>?`;
+      titleEl.closest('h4.heading, h3.title')?.after(wrap);
+    });
+  }
+
+  // ============================================================
+  // WORD COUNT INFLATION
+  // ============================================================
+
+  function addWordCountInflation() {
+    document.querySelectorAll('li.work.blurb').forEach(work => {
+      const statsEl = work.querySelector('dd.words');
+      if (!statsEl || statsEl.dataset.ao3cInflated) return;
+      statsEl.dataset.ao3cInflated = '1';
+      // Strip ALL non-digit chars (handles both comma and period thousand separators)
+      const real = parseInt(statsEl.textContent.replace(/\D/g, ''), 10);
+      if (isNaN(real) || real <= 0) return;
+      // Store the raw number as a data attr so reading speed can use it locale-safely
+      statsEl.dataset.ao3cRealWords = real;
+      const inflated = (real * 10).toLocaleString();
+      statsEl.textContent = inflated;
+      statsEl.title = `Real word count: ${real.toLocaleString()}. The extra ${(real * 9).toLocaleString()} words are subtext.`;
+      statsEl.style.setProperty('cursor', 'help', 'important');
+      statsEl.style.setProperty('text-decoration', 'underline dotted', 'important');
+    });
+
+    // Also on work detail page
+    const detailWords = document.querySelector('dl.work.meta.group dd.words');
+    if (detailWords && !detailWords.dataset.ao3cInflated) {
+      detailWords.dataset.ao3cInflated = '1';
+      const real = parseInt(detailWords.textContent.replace(/\D/g, ''), 10);
+      if (!isNaN(real) && real > 0) {
+        detailWords.dataset.ao3cRealWords = real;
+        const inflated = (real * 10).toLocaleString();
+        detailWords.textContent = inflated;
+        detailWords.title = `Real word count: ${real.toLocaleString()}. The extra ${(real * 9).toLocaleString()} words are subtext.`;
+        detailWords.style.setProperty('cursor', 'help', 'important');
+        detailWords.style.setProperty('text-decoration', 'underline dotted', 'important');
+      }
+    }
+  }
+
+  // ============================================================
+  // FAKE "CURRENTLY READING" COUNTER
+  // ============================================================
+
+  function addCurrentlyReadingCounter() {
+    document.querySelectorAll('li.work.blurb').forEach((work, i) => {
+      if (work.querySelector('.ao3c-reading-now')) return;
+      const workId = work.id.replace(/^work[_-]/, '');
+      const seed   = parseInt(workId, 10) || (i * 137 + 42);
+      // Start between 200 and 1200
+      let count    = 200 + (seed % 1000);
+      const span   = el('span', 'ao3c-reading-now');
+      span.innerHTML = `👁️ <span class="ao3c-reading-now-num">${count.toLocaleString()}</span> people reading right now`;
+
+      // Tick up/down realistically every 3–7 seconds
+      setInterval(() => {
+        const delta = Math.floor(Math.random() * 5) - 1; // usually goes up
+        count = Math.max(1, count + delta);
+        const numEl = span.querySelector('.ao3c-reading-now-num');
+        if (numEl) numEl.textContent = count.toLocaleString();
+      }, 3000 + Math.random() * 4000);
+
+      const stats = work.querySelector('dl.stats');
+      if (stats) stats.before(span); else work.appendChild(span);
+    });
+  }
+
+  // ============================================================
+  // FAKE SPOILER BLUR ON SUMMARY
+  // ============================================================
+
+  function addSpoilerBlur() {
+    document.querySelectorAll('li.work.blurb').forEach((work, i) => {
+      if (work.querySelector('.ao3c-spoiler-wrap')) return;
+      const summaryDiv = work.querySelector('div.summary blockquote, div.summary .userstuff');
+      if (!summaryDiv) return;
+
+      const wrap = el('div', 'ao3c-spoiler-wrap');
+      summaryDiv.parentNode.insertBefore(wrap, summaryDiv);
+      wrap.appendChild(summaryDiv);
+
+      const overlay = el('div', 'ao3c-spoiler-overlay');
+      // Alternate between different spoiler warning labels
+      const labels = [
+        '⚠️ Spoiler Protected — hover to reveal',
+        '🔒 Contains spoilers — hover to read',
+        '👀 Spoiler shield active — hover to peek',
+        '🙈 Summary hidden for your protection — hover',
+      ];
+      overlay.innerHTML = `<span class="ao3c-spoiler-label">${labels[i % labels.length]}</span>`;
+      wrap.appendChild(overlay);
+
+      // Hover reveals; mouse leave re-blurs
+      wrap.addEventListener('mouseenter', () => overlay.classList.add('ao3c-spoiler-revealed'));
+      wrap.addEventListener('mouseleave', () => overlay.classList.remove('ao3c-spoiler-revealed'));
+    });
+  }
+
+  // ============================================================
+  // "AUTHOR IS TYPING…" INDICATOR
+  // ============================================================
+
+  function addAuthorTypingIndicator() {
+    // Only on work detail pages — implies next chapter is coming
+    if (!getWorkIdFromUrl()) return;
+
+    const chapterCount = document.querySelector('dd.chapters');
+    if (!chapterCount) return;
+    const chapText = chapterCount.textContent.trim(); // e.g. "6/?" or "3/10"
+    const isComplete = !chapText.includes('?') && chapText.split('/')[0] === chapText.split('/')[1];
+    if (isComplete) return; // don't troll complete works
+
+    const indicator = el('div', 'ao3c-typing-indicator');
+    indicator.innerHTML = `
+      <span class="ao3c-typing-avatar">✍️</span>
+      <div class="ao3c-typing-content">
+        <span class="ao3c-typing-name">${document.querySelector('a[rel="author"]')?.textContent?.trim() || 'The Author'}</span>
+        <span class="ao3c-typing-status"> is typing a new chapter</span>
+        <span class="ao3c-typing-dots-wrap"><span class="ao3c-td">.</span><span class="ao3c-td">.</span><span class="ao3c-td">.</span></span>
+      </div>
+    `;
+
+    // Insert after the chapter navigation area or below the work meta
+    const nav = document.querySelector('div.chapter.preface.group, #chapters');
+    const workMeta = document.querySelector('dl.work.meta.group');
+    if (workMeta) workMeta.after(indicator);
+    else if (nav) nav.before(indicator);
+  }
+
+  // ============================================================
+  // READING SPEED ESTIMATOR
+  // ============================================================
+
+  // Average adult reading speed: ~238 wpm. We'll use a suspiciously precise value.
+  const READING_WPM = 238;
+
+  function addReadingSpeedEstimate() {
+    document.querySelectorAll('li.work.blurb').forEach((work, i) => {
+      if (work.querySelector('.ao3c-read-time')) return;
+      const wordsEl = work.querySelector('dd.words');
+      if (!wordsEl) return;
+
+      // Prefer the data attr set by addWordCountInflation (locale-safe raw integer).
+      // Fall back to stripping ALL non-digit chars from whatever is displayed.
+      const realWords = wordsEl.dataset.ao3cRealWords
+        ? parseInt(wordsEl.dataset.ao3cRealWords, 10)
+        : parseInt(wordsEl.textContent.replace(/\D/g, ''), 10);
+      if (isNaN(realWords) || realWords <= 0) return;
+
+      const totalMinutes = realWords / READING_WPM;
+      let timeStr;
+      if (totalMinutes < 1) {
+        timeStr = `${Math.round(totalMinutes * 60)} seconds`;
+      } else if (totalMinutes < 60) {
+        const mins = Math.floor(totalMinutes);
+        const secs = Math.round((totalMinutes - mins) * 60);
+        timeStr = secs > 0 ? `${mins} min ${secs} sec` : `${mins} minutes`;
+      } else {
+        const hrs  = Math.floor(totalMinutes / 60);
+        const mins = Math.round(totalMinutes % 60);
+        timeStr = mins > 0 ? `${hrs} hr ${mins} min` : `${hrs} hours`;
+      }
+
+      const span = el('span', 'ao3c-read-time');
+      span.innerHTML = `⏱️ Est. reading time: <strong>${timeStr}</strong>`;
+      span.title = `Calculated at ${READING_WPM} wpm average adult reading speed. Your mileage may vary by approximately 6–8 crying breaks.`;
+
+      const stats = work.querySelector('dl.stats');
+      if (stats) stats.after(span); else work.appendChild(span);
+    });
+
+    // Work detail page
+    if (getWorkIdFromUrl() && !document.querySelector('.ao3c-read-time-detail')) {
+      const wordsEl = document.querySelector('dl.work.meta.group dd.words');
+      if (!wordsEl) return;
+      const realWords = wordsEl.dataset.ao3cRealWords
+        ? parseInt(wordsEl.dataset.ao3cRealWords, 10)
+        : parseInt(wordsEl.textContent.replace(/\D/g, ''), 10);
+      if (isNaN(realWords) || realWords <= 0) return;
+
+      const totalMinutes = realWords / READING_WPM;
+      const hrs  = Math.floor(totalMinutes / 60);
+      const mins = Math.round(totalMinutes % 60);
+      const timeStr = hrs > 0
+        ? `${hrs} hr ${mins} min`
+        : `${Math.floor(totalMinutes)} min ${Math.round((totalMinutes % 1) * 60)} sec`;
+
+      const span = el('span', 'ao3c-read-time ao3c-read-time-detail');
+      span.innerHTML = `⏱️ Est. reading time: <strong>${timeStr}</strong><span class="ao3c-read-time-note"> (${Math.max(1, Math.round(totalMinutes / 20))} crying break${Math.round(totalMinutes / 20) !== 1 ? 's' : ''} not included)</span>`;
+      const workMeta = document.querySelector('dl.work.meta.group');
+      if (workMeta) workMeta.after(span);
+    }
+  }
+
+  // ============================================================
   // INIT
   // ============================================================
 
@@ -1187,6 +1416,12 @@
     addAuthorFaceId();
     addEngagementFarming();
     addSponsoredTags();
+    addDidYouMean();
+    addWordCountInflation();
+    addCurrentlyReadingCounter();
+    addSpoilerBlur();
+    addAuthorTypingIndicator();
+    addReadingSpeedEstimate();
     runEscalationEffects();
   }
 

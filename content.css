@@ -356,18 +356,22 @@
 .ao3c-money-list li { padding: 4px 0 !important; font-size: 0.88rem !important; }
 
 /* ---- ENGAGEMENT FARMING ---- */
-/* Inserted as first child of li.work.blurb with float:right
-   so it appears at the top-right corner of every work card */
+/* position:absolute so it never pushes warnings/tags/content downwards.
+   The li.work.blurb gets position:relative set inline by JS. */
 .ao3c-engagement {
-  float: right !important;
-  clear: none !important;
+  position: absolute !important;
+  top: 38px !important;  /* sits below p.datetime + a little breathing room */
+  right: 0 !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: flex-end !important;
   gap: 4px !important;
-  margin: 0 0 6px 12px !important;
-  max-width: 280px !important;
+  padding: 2px 0 4px !important;
+  max-width: 260px !important;
+  z-index: 1 !important;
+  pointer-events: none !important; /* don't block clicks on date etc */
 }
+.ao3c-engagement > * { pointer-events: all !important; }
 .ao3c-trending-badge {
   background: linear-gradient(135deg, #ff6b6b, #ee5a24) !important; color: #fff !important;
   font-size: 0.72rem !important; font-weight: bold !important; padding: 2px 8px !important;
@@ -447,3 +451,134 @@
 
 /* ---- SHARED ANIMATIONS ---- */
 @keyframes ao3c-bounce { from { transform: translateY(0); } to { transform: translateY(-5px); } }
+
+/* ---- DID YOU MEAN ---- */
+.ao3c-dym {
+  font-size: 0.8rem !important;
+  color: #666 !important;
+  margin: 2px 0 5px 70px !important;  /* left margin clears the 2×icon block (~60px) */
+  font-style: italic !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+  clear: left !important;
+  display: block !important;
+}
+.ao3c-dym-link {
+  color: #900 !important;
+  text-decoration: underline dotted !important;
+}
+.ao3c-dym-link:hover { text-decoration: underline solid !important; }
+
+/* ---- CURRENTLY READING ---- */
+.ao3c-reading-now {
+  display: inline-block !important;
+  font-size: 0.78rem !important;
+  color: #e65100 !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+  font-weight: bold !important;
+  margin: 4px 0 !important;
+  background: #fff3e0 !important;
+  border: 1px solid #ffcc80 !important;
+  border-radius: 10px !important;
+  padding: 2px 10px !important;
+  animation: ao3c-pulse-orange 2s ease-in-out infinite !important;
+}
+@keyframes ao3c-pulse-orange {
+  0%,100% { box-shadow: 0 0 0 rgba(230,81,0,0); }
+  50%      { box-shadow: 0 0 6px rgba(230,81,0,0.3); }
+}
+
+/* ---- SPOILER BLUR ---- */
+.ao3c-spoiler-wrap {
+  position: relative !important;
+  display: block !important;
+}
+.ao3c-spoiler-wrap blockquote,
+.ao3c-spoiler-wrap .userstuff {
+  filter: blur(5px) !important;
+  transition: filter 0.35s ease !important;
+  user-select: none !important;
+  pointer-events: none !important;
+}
+.ao3c-spoiler-wrap:hover blockquote,
+.ao3c-spoiler-wrap:hover .userstuff {
+  filter: blur(0px) !important;
+  user-select: auto !important;
+  pointer-events: auto !important;
+}
+.ao3c-spoiler-overlay {
+  position: absolute !important;
+  inset: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  transition: opacity 0.25s ease !important;
+  z-index: 2 !important;
+}
+.ao3c-spoiler-overlay.ao3c-spoiler-revealed {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+.ao3c-spoiler-label {
+  background: rgba(0,0,0,0.65) !important;
+  color: #fff !important;
+  font-size: 0.78rem !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+  font-weight: bold !important;
+  padding: 4px 12px !important;
+  border-radius: 12px !important;
+  white-space: nowrap !important;
+}
+
+/* ---- AUTHOR IS TYPING ---- */
+.ao3c-typing-indicator {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  background: #f8f9fa !important;
+  border: 1px solid #e0e0e0 !important;
+  border-left: 4px solid #900 !important;
+  border-radius: 6px !important;
+  padding: 10px 16px !important;
+  margin: 12px 0 !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+.ao3c-typing-avatar { font-size: 1.5rem !important; flex-shrink: 0 !important; }
+.ao3c-typing-content { font-size: 0.88rem !important; color: #444 !important; }
+.ao3c-typing-name { font-weight: bold !important; color: #900 !important; }
+.ao3c-typing-dots-wrap { display: inline-block !important; margin-left: 2px !important; }
+.ao3c-td {
+  display: inline-block !important;
+  animation: ao3c-typing-dot 1.4s ease-in-out infinite !important;
+  font-weight: bold !important;
+  color: #900 !important;
+}
+.ao3c-td:nth-child(2) { animation-delay: 0.2s !important; }
+.ao3c-td:nth-child(3) { animation-delay: 0.4s !important; }
+@keyframes ao3c-typing-dot {
+  0%,80%,100% { opacity: 0.2; transform: translateY(0); }
+  40%         { opacity: 1;   transform: translateY(-3px); }
+}
+
+/* ---- READING SPEED ESTIMATE ---- */
+.ao3c-read-time {
+  display: inline-block !important;
+  font-size: 0.78rem !important;
+  color: #555 !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+  margin: 3px 0 !important;
+  background: #f0f4ff !important;
+  border: 1px solid #c5cae9 !important;
+  border-radius: 10px !important;
+  padding: 2px 10px !important;
+  cursor: help !important;
+}
+.ao3c-read-time strong { color: #333 !important; }
+.ao3c-read-time-detail {
+  display: block !important;
+  border-radius: 6px !important;
+  margin: 8px 0 !important;
+  padding: 6px 14px !important;
+  font-size: 0.85rem !important;
+}
+.ao3c-read-time-note { color: #999 !important; font-style: italic !important; font-size: 0.75rem !important; }
