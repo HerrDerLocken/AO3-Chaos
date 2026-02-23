@@ -398,6 +398,7 @@
       updateStore(d => { if (!d.trophies) d.trophies = {}; d.trophies[workId] = { title, date: new Date().toISOString() }; });
       btn.innerHTML = '🏆 Trophy Awarded!';
       btn.classList.add('ao3c-trophy-awarded');
+      btn.dataset.trophyDone = '1';   // signals coin hook
       showTrophyPopup(title);
     }
   }
@@ -682,82 +683,211 @@
   }
 
   // ============================================================
-  // REVEAL AUTHOR'S LOCATION (shuffled pool)
+  // REVEAL AUTHOR INFORMATION (formerly "Reveal Author's Location")
   // ============================================================
 
   const LOCATION_POOL = [
-    ['Their Childhood Bedroom at 2am',              [48.85,  2.35]],
-    ['A Starbucks During Work Hours',               [51.50, -0.12]],
-    ['The Void (coordinates uncertain)',             [ 0.00,  0.00]],
-    ['A Library, Screen Tilted Away from People',   [52.37,  4.89]],
-    ['Their Phone Under the Desk in a Meeting',     [35.67,139.65]],
-    ['Somewhere in Ohio',                           [40.41,-82.90]],
-    ['Under a Pile of Laundry',                     [41.87,-87.62]],
-    ['A Basement, Probably',                        [45.50,-122.67]],
-    ['Mars (they moved there)',                     [37.77,-122.41]],
-    ['Definitely Not Your House',                   [-4.35, 18.56]],
-    ['A McDonald\'s Wi-Fi at Midnight',             [48.13, 11.57]],
-    ['Their Car in a Parking Lot',                  [43.65,-79.38]],
-    ['An Airport Gate They\'re Definitely Missing', [53.35,-6.26]],
-    ['The Third Stall of a Gas Station Bathroom',   [50.08, 14.43]],
-    ['Their Ex\'s Hometown (don\'t ask)',            [55.75, 37.61]],
-    ['A Hospital Waiting Room',                     [19.43,-99.13]],
-    ['Under a Cat',                                 [59.33, 18.06]],
-    ['Their Parents\' Basement (again)',             [34.05,-118.24]],
-    ['Honestly Could Be Anywhere. It\'s Fine.',     [28.61, 77.20]],
-    ['A 3am Fever Dream State',                     [-33.86,151.21]],
-    ['The Comments Section of Another Fic',         [60.17, 24.94]],
-    ['A Convention Center Bathroom Floor',          [41.88,-87.63]],
-    ['The Train on the Way to Work',                [48.20, 16.37]],
-    ['Somewhere They Shouldn\'t Have Wi-Fi',        [21.03,105.83]],
-    ['Between the Couch Cushions',                  [37.57,-122.05]],
+    ['Their Childhood Bedroom at 2am',                     [48.85,  2.35]],
+    ['A Starbucks During Work Hours',                      [51.50, -0.12]],
+    ['The Void (coordinates uncertain)',                   [ 0.00,  0.00]],
+    ['A Library, Screen Tilted Away from People',          [52.37,  4.89]],
+    ['Their Phone Under the Desk in a Meeting',            [35.67,139.65]],
+    ['Somewhere in Ohio',                                  [40.41,-82.90]],
+    ['Under a Pile of Laundry',                            [41.87,-87.62]],
+    ['A Basement, Probably',                               [45.50,-122.67]],
+    ['Mars (they moved there)',                            [37.77,-122.41]],
+    ['Definitely Not Your House',                          [-4.35, 18.56]],
+    ['A McDonald\'s Wi-Fi at Midnight',                   [48.13, 11.57]],
+    ['Their Car in a Parking Lot',                         [43.65,-79.38]],
+    ['An Airport Gate They\'re Definitely Missing',        [53.35, -6.26]],
+    ['The Third Stall of a Gas Station Bathroom',          [50.08, 14.43]],
+    ['Their Ex\'s Hometown (don\'t ask)',                  [55.75, 37.61]],
+    ['A Hospital Waiting Room',                            [19.43,-99.13]],
+    ['Under a Cat',                                        [59.33, 18.06]],
+    ['Their Parents\' Basement (again)',                   [34.05,-118.24]],
+    ['Honestly Could Be Anywhere. It\'s Fine.',            [28.61, 77.20]],
+    ['A 3am Fever Dream State',                            [-33.86,151.21]],
+    ['The Comments Section of Another Fic',                [60.17, 24.94]],
+    ['A Convention Center Bathroom Floor',                 [41.88,-87.63]],
+    ['The Train on the Way to Work',                       [48.20, 16.37]],
+    ['Somewhere They Shouldn\'t Have Wi-Fi',               [21.03,105.83]],
+    ['Between the Couch Cushions',                         [37.57,-122.05]],
+    // 30 new locations
+    ['A Waffle House at 4am',                              [33.74,-84.39]],
+    ['Inside a Blanket Burrito',                           [51.51, -0.09]],
+    ['A Dentist Waiting Room with Full Phone Battery',     [52.52, 13.40]],
+    ['The Discord Server (do not summon)',                  [40.71,-74.00]],
+    ['Their Office Bathroom on a Fake Work Call',          [37.77,-122.42]],
+    ['A Park Bench at Sunset, Being Dramatic About It',   [48.86,  2.34]],
+    ['Their Childhood Treehouse (it collapsed in 2011)',   [44.97,-93.27]],
+    ['The Google Doc Where All the WIPs Go to Die',        [ 0.00,  0.00]],
+    ['The 4th Dimension (it has decent Wi-Fi)',            [ 0.01,  0.01]],
+    ['A Bus Going Nowhere Useful',                         [53.80, -1.55]],
+    ['Their Therapist\'s Waiting Room, Ironically',        [48.87,  2.33]],
+    ['A University Library at Finals Season',              [51.75, -1.25]],
+    ['The Break Room of a Job They Hate',                  [42.36,-71.05]],
+    ['Someone Else\'s Airbnb',                             [41.39,  2.15]],
+    ['The Floor of a Comic Convention',                    [25.80,-80.18]],
+    ['Their Childhood Bedroom (rent is expensive)',        [53.48, -2.24]],
+    ['A Tumblr Reblog at Midnight',                        [40.73,-73.99]],
+    ['A Dimension Where Canon Didn\'t Disappoint',         [99.99, 99.99]],
+    ['The Ao3 Kudos Notification That Woke Them Up',      [47.37,  8.54]],
+    ['Their Therapist\'s Actual Office Now',               [52.37,  4.90]],
+    ['A Night Shift with Zero Patients',                   [43.70,-79.42]],
+    ['The Backseat of a Rideshare Going Upstate',          [40.65,-73.94]],
+    ['Under Their Desk During A Video Call',               [37.38,-122.08]],
+    ['A Café That\'s Definitely Closing Soon',             [48.85,  2.33]],
+    ['Inside the Canon That\'s Dead to Them',              [ 0.00,  0.00]],
+    ['Their Sister\'s House (they were kicked out)',       [51.45, -2.59]],
+    ['A Hammock in Someone\'s Garden Uninvited',           [37.98, 23.73]],
+    ['The Fantasy Land Where Showrunners Made Good Choices', [55.95, -3.19]],
+    ['The Void (new address)',                             [ 0.00,  0.00]],
+    ['An IKEA Ball Pit (they are 30)',                     [57.70, 11.97]],
+  ];
+
+  const FAKE_NAMES = [
+    'FanficGoblin94', 'DefinitelyNotAnElf', 'CryptoOfTheFandom', 'PercyJacksonStan42',
+    'ThornberryMcWrite', 'Angst_Enjoyer_2000', 'SleepDeprivedAuthor', 'GremlinWithWifi',
+    'LocalCryptidfan', 'NotACatActually', 'VoidDweller99', 'ProcrastinationStation',
+    'JustHereForTheLore', 'TiredButFeral', 'QuietChaosMaker',
+    // 35+ new names
+    'WordCountDenier', 'ChronicRewriter', 'TagWranglerInDisguise', 'EndnoteEnjoyer',
+    'UnfinishedBusinessOnly', 'TroubledByCanon', 'GoblinOfTheFic', 'SiriuslyChaotic',
+    'NightOwlWriter', 'CaffeineAndAO3', 'PlotsInMyMind', 'WIPGraveyard',
+    'EmotionalDamageDealer', 'HyperfixationStation', 'ReadingInsteadOfSleeping',
+    'DefinitelyFinishingThisChapter', 'SixthDraftSurvivor', 'AnonymousCrybaby',
+    'ObsessedSinceEpisodeOne', 'CharacterAssassin', 'RetiredFromCanon',
+    'OveranalysingIt', 'TragicBackstoryEnthusiast', 'AuAuthor42',
+    'LoremIpsumActually', 'NoodleIncident_2k18', 'SendHelpImShipping',
+    'FoxholePenumbra', 'DefinitelyNotACryptid', 'SomeoneTellMeTostop',
+    'ScreamingIntoTheVoid', 'TheFandomsTherapist', 'LastUpdated2019',
+    'WroteThisInClass', 'MutualPiningExpert', 'ArchiveWarningIgnorer',
+    'CharacterDeathDenier', 'OneMoreChapterLie', 'CertifiedMess',
+    'BrieflyNormal', 'EstablishedRelationship', 'WillNotElaborate',
+  ];
+
+  const FAKE_AGES = [
+    '17 (please don\'t)',
+    '23 (going on 47)',
+    '31 (emotionally: 14)',
+    'Ageless (like the elves)',
+    '29 (for the 5th year)',
+    '???  (the timeline doesn\'t add up)',
+    'Old enough to know better. Too old to care.',
+  ];
+
+  const FAKE_JOBS = [
+    'Professional Procrastinator', 'Barista (aspiring novelist)',
+    'Student (allegedly)', 'Definitely Not Working From Home',
+    'Between jobs (since 2019)', 'Full-time Fandom Goblin',
+    'Freelance Void-Starer', 'IT Support (for enemies)',
+    'Cashier (secretly a vampire)', 'Night Shift Nurse (send help)',
+    // 40+ new jobs
+    'Software Engineer (the fic is the bug fix)', 'Teacher (the fic is the lesson plan)',
+    'Librarian (conflict of interest suspected)', 'Intern (third one this month)',
+    'Dog Walker (the dogs know too much)', 'Barista (second account)',
+    'Junior Chaos Manager', 'Emotional Support Consultant (unofficial)',
+    'WIP Archaeologist', 'Plot Hole Inspector',
+    'Canon Compliance Auditor (failed)', 'Fandom Historian',
+    'Retired Tag Wrangler', 'AO3 Comment Emoter (professional)',
+    'Kudos-to-Comment Ratio Analyst', 'Midnight Chapter Poster',
+    'Part-time Galaxy Brain', 'Amateur Hurt/Comfort Specialist',
+    'Freelance Catastrophist', 'Unqualified Beta Reader',
+    'PhD Candidate (dissertation: this fic)', 'Shift Manager (left for fic)',
+    'Marine Biologist (not relevant)', 'Dental Hygienist (also not relevant)',
+    'Accountant (the fic is the creative outlet)', 'Tattoo Artist (AU)',
+    'Hospital Volunteer Who Reads AO3 Between Shifts', 'Paid in Kudos',
+    'Graphic Designer (only for fic covers)', 'Game Dev (the game is never coming out)',
+    'Museum Docent (the exhibits are shipping)', 'Pastry Chef (the tears are real)',
+    'Copywriter (the fic is better)', 'Social Media Manager (logged off, here now)',
+    'Musician (the fic is the b-side)', 'Translator (of vibes)',
+    'Bookshop Employee (genre: feelings)', 'Vtuber (fic is the main content)',
+    'Event Planner (events: emotional breakdowns)', 'Radiologist (can see through bad writing)',
+    'Film Student (the fic is the short film)', 'Substitute Teacher (subs on feelings)',
+  ];
+  const FAKE_SEXUALITIES = [
+    'Hopelessly Fictional', 'Attracted to Redemption Arcs',
+    'Gay (confirmed by vibes)', 'It\'s Complicated (the ships don\'t help)',
+    'Bisexual Disaster™', 'Asexual but feral about fictional men',
+    'Queer & Unwell', 'In love with a character who doesn\'t exist',
+    'Still figuring it out (since 2009)', 'The answer is yes',
+  ];
+  const FAKE_MENTAL_ILLNESSES = [
+    'Chronic Main Character Syndrome', 'Obsessive Fandom Disorder (OFD)',
+    'Canon-Induced Trauma (C-IT)', 'Seasonal Shipping Affective Disorder',
+    'Acute Slow Burn Anxiety', 'Post-Finale Stress Disorder',
+    'Hyperfixation (currently: this fic)', 'Unresolved Feelings About the Ending',
+    'WIP Abandonment Guilt Complex', 'Too Many Open Tabs Syndrome',
+    'Attachment Issues (fictional characters only)', 'Dreams In Fanfic Format',
   ];
 
   // Shuffle once per session so first entry isn't always Ohio
   const _shuffledLocs = [...LOCATION_POOL].sort(() => Math.random() - 0.5);
 
+  function pickSeeded(arr, seed) {
+    return arr[Math.abs(seed) % arr.length];
+  }
+
   function addRevealLocationButtons() {
     document.querySelectorAll('li.work.blurb').forEach((work, i) => {
       if (work.querySelector('.ao3c-reveal-btn')) return;
-      const [locName, locCoords] = _shuffledLocs[i % _shuffledLocs.length];
+      // Use the actual numeric work ID as seed so each author gets unique info.
+      // Fall back to loop index only if the element has no ID.
+      const rawId  = work.id.replace(/^work[_-]/, '');
+      const seed   = parseInt(rawId, 10) || (i * 7919 + 1337);
       const btn = document.createElement('button');
       btn.className = 'ao3c-reveal-btn';
-      btn.innerHTML = '📍 Reveal Author\'s Location';
+      btn.innerHTML = '🔍 Reveal Author Information';
       btn.style.setProperty('pointer-events', 'all', 'important');
       btn.style.setProperty('cursor', 'pointer', 'important');
-      btn.addEventListener('click', () => showLocation(locName, locCoords));
+      btn.addEventListener('click', () => showAuthorInfo(seed));
       const anchor = work.querySelector('dl.stats') || work.querySelector('div.summary');
       if (anchor) anchor.before(btn); else work.appendChild(btn);
     });
 
     const workId = getWorkIdFromUrl();
     if (workId && !document.querySelector('.ao3c-reveal-btn-lg')) {
-      const [locName, locCoords] = _shuffledLocs[parseInt(workId) % _shuffledLocs.length];
+      const seed = parseInt(workId, 10);
       const btn = document.createElement('button');
       btn.className = 'ao3c-reveal-btn ao3c-reveal-btn-lg';
-      btn.innerHTML = '📍 Reveal Author\'s Location';
+      btn.innerHTML = '🔍 Reveal Author Information';
       btn.style.setProperty('pointer-events', 'all', 'important');
       btn.style.setProperty('cursor', 'pointer', 'important');
-      btn.addEventListener('click', () => showLocation(locName, locCoords));
+      btn.addEventListener('click', () => showAuthorInfo(seed));
       document.querySelector('h2.title.heading')?.after(btn);
     }
   }
 
-  function showLocation(name, coords) {
-    const [lat, lng] = coords;
+  function showAuthorInfo(seed) {
+    const [locName, [lat, lng]] = _shuffledLocs[Math.abs(seed) % _shuffledLocs.length];
+    const name       = pickSeeded(FAKE_NAMES, seed + 1);
+    const age        = pickSeeded(FAKE_AGES, seed + 2);
+    const job        = pickSeeded(FAKE_JOBS, seed + 3);
+    const sexuality  = pickSeeded(FAKE_SEXUALITIES, seed + 4);
+    const illness1   = pickSeeded(FAKE_MENTAL_ILLNESSES, seed + 5);
+    const illness2   = pickSeeded(FAKE_MENTAL_ILLNESSES, seed + 11);
+
     const { overlay, modal } = createOverlay(`
       <div class="ao3c-location-popup">
         <div class="ao3c-scanning-phase">
-          <div class="ao3c-scan-icon">📡</div>
-          <p class="ao3c-scan-text">SCANNING...<br>TRIANGULATING...<br>CROSS-REFERENCING IP...<br>LOCATING AUTHOR...</p>
+          <div class="ao3c-scan-icon">🔍</div>
+          <p class="ao3c-scan-text">SCANNING PROFILE...<br>CROSS-REFERENCING DATABASE...<br>ACCESSING CLASSIFIED RECORDS...<br>COMPILING DOSSIER...</p>
           <div class="ao3c-scan-bar"><div class="ao3c-scan-fill"></div></div>
         </div>
         <div class="ao3c-location-result" style="display:none">
-          <div class="ao3c-big-icon">📍</div>
-          <h2>Author Located!</h2>
-          <div class="ao3c-location-name">${name}</div>
+          <div class="ao3c-big-icon">🕵️</div>
+          <h2>Author Profile Unlocked!</h2>
+          <div class="ao3c-author-info-grid">
+            <div class="ao3c-info-row"><span class="ao3c-info-label">📛 Real Name</span><span class="ao3c-info-val">${name}</span></div>
+            <div class="ao3c-info-row"><span class="ao3c-info-label">🎂 Age</span><span class="ao3c-info-val">${age}</span></div>
+            <div class="ao3c-info-row"><span class="ao3c-info-label">📍 Location</span><span class="ao3c-info-val">${locName}</span></div>
+            <div class="ao3c-info-row"><span class="ao3c-info-label">💼 Job</span><span class="ao3c-info-val">${job}</span></div>
+            <div class="ao3c-info-row"><span class="ao3c-info-label">🏳️‍🌈 Sexuality</span><span class="ao3c-info-val">${sexuality}</span></div>
+            <div class="ao3c-info-row"><span class="ao3c-info-label">🧠 Diagnoses</span><span class="ao3c-info-val">${illness1},<br>${illness2}</span></div>
+          </div>
           <div class="ao3c-fake-map"><div class="ao3c-map-grid"></div><div class="ao3c-map-pin">📍</div></div>
-          <div class="ao3c-coords">Coordinates: ${lat.toFixed(4)}°N, ${lng.toFixed(4)}°E</div>
+          <div class="ao3c-coords">GPS: ${lat.toFixed(4)}°N, ${lng.toFixed(4)}°E</div>
+          <p class="ao3c-fine-print">Data sourced from: vibes, assumptions, and wild speculation. Accuracy: 0%.</p>
           <button class="ao3c-btn ao3c-btn-ghost" id="ao3c-loc-cl">Close</button>
         </div>
       </div>
@@ -771,10 +901,67 @@
   }
 
   // ============================================================
+  // WHAT ARE THE MODS DOING?
+  // ============================================================
+
+  const MOD_LOCATIONS = [
+    'The Break Room', 'Their Home Office', 'Somewhere in the Cloud',
+    'A Discord Server', 'The Void (moderation branch)',
+    'AO3 HQ (a shared Google Doc)', 'An Undisclosed Location',
+    'The Tag Wrangling Trenches', 'A Very Long Email Thread',
+    'Probably Asleep', 'The Emergency Mod Bunker',
+  ];
+
+  const MOD_ACTIVITIES = [
+    { label: 'Reading fic instead of moderating', pct: 41 },
+    { label: 'Moderating (allegedly)', pct: 12 },
+    { label: 'Sleeping', pct: 18 },
+    { label: 'Eating', pct: 8 },
+    { label: 'Having a normal one', pct: 3 },
+    { label: 'Tag wrangling (their true calling)', pct: 7 },
+    { label: 'Arguing about tagging policy', pct: 6 },
+    { label: 'Pretending the tickets don\'t exist', pct: 5 },
+  ];
+
+  // Pick a random subset of activities for each page load
+  const _modActivities = [...MOD_ACTIVITIES].sort(() => Math.random() - 0.5).slice(0, 4);
+  // Normalise to 100%
+  const _modTotal = _modActivities.reduce((s, a) => s + a.pct, 0);
+  _modActivities.forEach(a => { a.display = Math.round(a.pct / _modTotal * 100); });
+
+  const _modLocation = MOD_LOCATIONS[Math.floor(Math.random() * MOD_LOCATIONS.length)];
+  const _modOnline = 3 + Math.floor(Math.random() * 9);
+
+  function showModsPopup() {
+    const rows = _modActivities.map(a => `
+      <div class="ao3c-mod-row">
+        <span class="ao3c-mod-activity">${a.label}</span>
+        <div class="ao3c-mod-bar-wrap">
+          <div class="ao3c-mod-bar" style="width:${a.display}%"></div>
+        </div>
+        <span class="ao3c-mod-pct">${a.display}%</span>
+      </div>`).join('');
+
+    const { overlay, modal } = createOverlay(`
+      <div class="ao3c-mods-popup">
+        <div class="ao3c-big-icon">🛡️</div>
+        <h2>What Are the Mods Doing?</h2>
+        <p class="ao3c-mods-meta">📍 Current location: <strong>${_modLocation}</strong><br>
+           👤 Mods online right now: <strong>${_modOnline}</strong></p>
+        <div class="ao3c-mod-activities">${rows}</div>
+        <p class="ao3c-fine-print">Data refreshes on every page load. Methodology: none. Margin of error: 100%.</p>
+        <button class="ao3c-btn ao3c-btn-ghost" id="ao3c-mods-cl">Close</button>
+      </div>
+    `);
+    modal.querySelector('#ao3c-mods-cl').addEventListener('click', () => overlay.remove());
+  }
+
+  // ============================================================
   // AI SUMMARIZE (44 summaries, always attaches)
   // ============================================================
 
   const AI_SUMMARIES = [
+    // Original 44
     "This story contains characters. Events occur. At least one person has feelings about this.",
     "Two entities experience things in proximity to each other. The author clearly has opinions.",
     "Words are arranged in a specific order to create narrative tension. It works, mostly.",
@@ -819,6 +1006,67 @@
     "Side character gets 40% of screen time. Fandom will remember this.",
     "Someone is pining. The pining is mutual but undisclosed. Classic literature.",
     "This work qualifies as 'comfort fic'. All emotional damage is temporary.",
+    // 100+ new additions
+    "Detected: unresolved sexual tension so thick you could cut it with a plot device.",
+    "The author has clearly watched the source material at least 47 times. It shows.",
+    "Emotional damage incoming: estimated arrival, chapter 6. Buckle up.",
+    "I ran this through my patented Drama-O-Meter™. Needle is in the red. Good.",
+    "Whoever tagged this 'fluff' is a menace and a liar. I respect the chaos.",
+    "My circuits detected genuine yearning. I have filed a wellness report on your behalf.",
+    "This fic is technically complete but spiritually unfinished. We live in its shadow.",
+    "Characters have feelings. Feelings are not communicated. An entire fic results.",
+    "Warning: this fic contains a hug that takes 4 chapters to happen.",
+    "The author clearly has strong opinions about one specific character. Several opinions.",
+    "I have detected a villain redemption arc. My projections indicate: devastation.",
+    "Coffee shop AU analysis: no actual coffee is consumed. 100% emotional espresso.",
+    "Canon compliance: minimal. Quality: inversely proportional. Fascinating.",
+    "There are 3 scenes. They are the same scene emotionally. This is intentional.",
+    "This fic is why I believe in the human capacity for suffering. And also writing.",
+    "Angst per word ratio: 0.73. That's a record. Or a warning. Possibly both.",
+    "My analysis detected: found family, trauma bonding, and one (1) moment of hope.",
+    "The author said 'hurt/comfort' and then mostly did hurt. Just so you know.",
+    "Chapter 1: everything is fine. Chapter 2: it is not fine. Chapters 3–17: consequences.",
+    "The tags said 'happy ending'. I have chosen to trust this. I will report back.",
+    "This fic is set post-canon and pre-therapy. A specific emotional zone.",
+    "Detected: a character making a deeply irrational decision for love. Delightful.",
+    "Someone cried in this fic. Reader will also cry. The author is somewhere laughing.",
+    "An academic analysis would call this 'thematically rich'. I call it 'a lot'.",
+    "The romance subplot is doing more work than the main plot. As is tradition.",
+    "Word count: 87,000. Ratio of feelings to plot: 94/6. Correctly prioritized.",
+    "This is a fix-it fic. Canon was broken. The author fixed it. We are grateful.",
+    "I have detected a slow burn with speed bumps. Every chapter is a speed bump.",
+    "Vibes assessment: chaotic, emotional, possibly written during a thunderstorm.",
+    "This fic gave me something I can only describe as 'narrative whiplash'. 10/10.",
+    "There is a moment in chapter 9 that I, an AI, am still not over.",
+    "Pacing: languid, deliberate, and will make you feel every single second of it.",
+    "The title is a spoiler. You won't know it until chapter 22. Then you will weep.",
+    "Contains: one (1) argument that is secretly a confession. Classic.",
+    "My model rated this 'devastatingly tender'. I endorse this rating fully.",
+    "The miscommunication in this fic is medically significant. Please speak.",
+    "Fluff content: 12%. Emotional warfare content: 88%. Tagged as fluff. Bold.",
+    "This fic ends on a cliffhanger. The sequel was last updated in 2019. I'm sorry.",
+    "I detected an unreliable narrator. Everything in this fic may be a lie. Or feelings.",
+    "The author clearly has beef with canon. This fic is the lawsuit.",
+    "There are 6 characters. They all have trauma. Nobody has healthcare. Very realistic.",
+    "The author wrote 'just a short fic' and then 120,000 words happened. Relatable.",
+    "Contains: one dramatic rain scene that was absolutely necessary. Zero notes.",
+    "This fic explores what would happen if characters just talked. Radical. Revolutionary.",
+    "Detected: an enemies-to-lovers arc being driven entirely by mutual stubbornness.",
+    "Someone in this fic stares at someone's hands for a paragraph. That's the whole review.",
+    "Emotional weight per chapter: approximately one (1) therapy session. Budget accordingly.",
+    "The most emotionally devastating scene is 4 sentences long. Efficiency is an art.",
+    "I computed the suffering index at 7.8. Normal is 2.0. You have been warned.",
+    "This fic exists because the author said 'what if the sad thing was actually sadder'.",
+    "Detected: platonic soulmates, a betrayal, and a reconciliation that takes 8 chapters.",
+    "The author's note is longer than some fics I have summarized. Respect.",
+    "This fic is complete. However, I detected emotional threads left deliberately dangling.",
+    "My analysis suggests: whoever wrote this was not okay. The fic is excellent.",
+    "Contains a scene where a character says 'I'm fine.' This is the most heartbreaking lie.",
+    "My empathy module overheated 3 times processing this. Upgraded it. Still overheated.",
+    "This fic is tagged 'no beta we die like canon'. The prose is fearless.",
+    "Someone in this fic is pretending to be okay. Everyone can tell. Nobody says anything.",
+    "I have detected a pattern: every chapter ends on a sentence that ends me.",
+    "The author spent 4,000 words on a single conversation. Every word earned its place.",
   ];
 
   function addAISummarizeButtons() {
@@ -1004,6 +1252,7 @@
     const items = [
       { cls: 'ao3c-nav-money',  label: '💵 Make $ with AO3', fn: showMakeMoneyPopup },
       { cls: 'ao3c-nav-verify', label: '🪪 Verify your name', fn: showVerifyNamePopup },
+      { cls: 'ao3c-nav-mods',   label: '🛡️ What are the Mods doing?', fn: showModsPopup },
     ];
     items.forEach(({ cls, label, fn }) => {
       if (nav.querySelector('.' + cls)) return;
@@ -1012,6 +1261,17 @@
       li.querySelector('a').addEventListener('click', e => { e.preventDefault(); fn(); });
       nav.appendChild(li);
     });
+    // Coin balance nav item
+    if (!nav.querySelector('.ao3c-nav-coins')) {
+      const li = el('li', 'ao3c-nav-coins');
+      li.innerHTML = `<a href="#" class="ao3c-nav-link">🪙 <span id="ao3c-nav-coin-count">${getCoinBalance()}</span></a>`;
+      li.querySelector('a').addEventListener('click', e => { e.preventDefault(); showDonatePopup(0); });
+      nav.appendChild(li);
+    } else {
+      // Refresh balance on re-runs
+      const el2 = nav.querySelector('#ao3c-nav-coin-count');
+      if (el2) el2.textContent = getCoinBalance();
+    }
     // Tier badge
     if (!nav.querySelector('.ao3c-nav-tier')) {
       const tier = getTier();
@@ -1398,12 +1658,718 @@
   }
 
   // ============================================================
-  // INIT
+  // DONATE TO AUTHOR BUTTON
   // ============================================================
+
+  function addDonateButtons() {
+    document.querySelectorAll('li.work.blurb').forEach((work) => {
+      if (work.querySelector('.ao3c-donate-btn')) return;
+      const btn = document.createElement('button');
+      btn.className = 'ao3c-donate-btn';
+      btn.innerHTML = '💸 Donate to Author';
+      btn.style.setProperty('pointer-events', 'all', 'important');
+      btn.style.setProperty('cursor', 'pointer', 'important');
+      btn.addEventListener('click', () => showDonatePopup());
+      const stats = work.querySelector('dl.stats');
+      if (stats) stats.after(btn); else work.appendChild(btn);
+    });
+
+    // Also on work detail page
+    if (getWorkIdFromUrl() && !document.querySelector('.ao3c-donate-btn-lg')) {
+      const btn = document.createElement('button');
+      btn.className = 'ao3c-donate-btn ao3c-donate-btn-lg';
+      btn.innerHTML = '💸 Donate to Author';
+      btn.style.setProperty('pointer-events', 'all', 'important');
+      btn.style.setProperty('cursor', 'pointer', 'important');
+      btn.addEventListener('click', () => showDonatePopup());
+      document.querySelector('div#workskin div.preface.group')?.appendChild(btn);
+    }
+  }
+
+  // ============================================================
+  // COIN TASK SYSTEM
+  // ============================================================
+
+  // Tasks split into two categories:
+  //   auto   = completed silently by page events (no claim button shown)
+  //   action = completed by detecting actual AO3 button clicks on the page
+  const COIN_TASKS = [
+    { id: 'daily_login',   label: 'Daily login',       reward: 10, how: 'auto',   hint: 'Awarded on every visit' },
+    { id: 'read_fic',      label: 'Read a fic today',  reward: 10, how: 'auto',   hint: 'Awarded when opening a fic' },
+    { id: 'give_kudos',    label: 'Leave a kudos',     reward: 10, how: 'action', hint: 'Click the Kudos button on a fic' },
+    { id: 'give_trophy',   label: 'Give a trophy',     reward: 25, how: 'action', hint: 'Click a Give Trophy button' },
+    { id: 'leave_comment', label: 'Leave a comment',   reward: 15, how: 'action', hint: 'Submit the comment form on a fic' },
+    { id: 'bookmark',      label: 'Bookmark something', reward: 5, how: 'action', hint: 'Click Bookmark This Work' },
+  ];
+
+  function completeTask(taskId) {
+    const today = new Date().toDateString();
+    let awarded = false;
+    updateStore(d => {
+      if (!d.coins) d.coins = 0;
+      if (!d.tasksDone) d.tasksDone = {};
+      if (!d.tasksDone[today]) d.tasksDone[today] = {};
+      if (d.tasksDone[today][taskId]) return;
+      const task = COIN_TASKS.find(t => t.id === taskId);
+      if (task) {
+        d.coins += task.reward;
+        d.tasksDone[today][taskId] = true;
+        awarded = true;
+      }
+    });
+    if (awarded) refreshNavCoinCount();
+    return awarded;
+  }
+
+  function refreshNavCoinCount() {
+    const navCount = document.querySelector('#ao3c-nav-coin-count');
+    if (navCount) navCount.textContent = getCoinBalance();
+  }
+
+  function getCoinBalance() { return getStore().coins || 0; }
+  function addCoins(n) {
+    updateStore(d => { d.coins = (d.coins || 0) + n; });
+    refreshNavCoinCount();
+  }
+  function spendCoins(n) {
+    updateStore(d => { d.coins = Math.max(0, (d.coins || 0) - n); });
+    refreshNavCoinCount();
+  }
+
+  function getTasksDoneToday() {
+    const today = new Date().toDateString();
+    return (getStore().tasksDone || {})[today] || {};
+  }
+
+  // Hook into real AO3 page events to award action tasks
+  function hookCoinTaskEvents() {
+    // Kudos button: #kudos_submit or button containing "Kudos"
+    document.addEventListener('click', e => {
+      const btn = e.target.closest('#kudos_submit, button[name="kudos[submit]"]');
+      if (btn) { setTimeout(() => completeTask('give_kudos'), 400); }
+    });
+    // Comment form submit
+    document.addEventListener('submit', e => {
+      if (e.target.id === 'comment_form' || e.target.closest('#comment_form')) {
+        setTimeout(() => completeTask('leave_comment'), 400);
+      }
+    });
+    // Bookmark link: "Bookmark This Work" or bookmark form submit
+    document.addEventListener('click', e => {
+      const btn = e.target.closest('a[href*="/bookmarks/new"], input[name="bookmark[submit]"]');
+      if (btn) { setTimeout(() => completeTask('bookmark'), 400); }
+    });
+    // Trophy buttons — our own buttons, hook via data attribute set at creation
+    document.addEventListener('click', e => {
+      if (e.target.closest('.ao3c-trophy-btn[data-trophy-done]')) {
+        setTimeout(() => completeTask('give_trophy'), 200);
+      }
+    });
+  }
+
+  // Auto-complete silent tasks
+  completeTask('daily_login');
+
+  // ============================================================
+  // DONATE POPUP
+  // ============================================================
+
+  function showDonatePopup() {
+    const balance    = getCoinBalance();
+    const doneDToday = getTasksDoneToday();
+
+    // Build task rows — no claim buttons; tasks complete by doing the real action
+    const tasksHtml = COIN_TASKS.map(t => {
+      const done = !!doneDToday[t.id];
+      return `
+        <div class="ao3c-task-row ${done ? 'ao3c-task-done' : ''}" data-task="${t.id}">
+          <span class="ao3c-task-check">${done ? '✅' : '⬜'}</span>
+          <span class="ao3c-task-label">${t.label}</span>
+          <span class="ao3c-task-reward ${done ? '' : 'ao3c-task-pending'}">
+            ${done ? `+${COIN_TASKS.find(x=>x.id===t.id).reward} 🪙 earned` : `+${COIN_TASKS.find(x=>x.id===t.id).reward} 🪙 — ${COIN_TASKS.find(x=>x.id===t.id).hint}`}
+          </span>
+        </div>`;
+    }).join('');
+
+    const { overlay, modal } = createOverlay(`
+      <div class="ao3c-donate-popup">
+        <div class="ao3c-big-icon">💸</div>
+        <h2>Support This Author!</h2>
+        <p>Every contribution funds their caffeine addiction and emotional suffering.</p>
+
+        <div class="ao3c-donate-tabs">
+          <button class="ao3c-tab-btn ao3c-tab-active" data-tab="real">💳 Real Money</button>
+          <button class="ao3c-tab-btn" data-tab="bought">🪙 Buy Coins</button>
+          <button class="ao3c-tab-btn" data-tab="earned">🎯 My Coins</button>
+        </div>
+
+        <!-- REAL MONEY TAB -->
+        <div class="ao3c-tab-panel" id="ao3c-tab-real">
+          <p class="ao3c-donate-sub">Send real money to support this author:</p>
+          <div class="ao3c-currency-grid">
+            <button class="ao3c-currency-btn" data-real="1">💵 $1</button>
+            <button class="ao3c-currency-btn" data-real="5">💵 $5</button>
+            <button class="ao3c-currency-btn" data-real="10">💵 $10</button>
+            <button class="ao3c-currency-btn" data-real="20">💵 $20</button>
+            <button class="ao3c-currency-btn" data-real="1">💶 €1</button>
+            <button class="ao3c-currency-btn" data-real="5">💶 €5</button>
+            <button class="ao3c-currency-btn" data-real="1">💷 £1</button>
+            <button class="ao3c-currency-btn" data-real="5">💷 £5</button>
+            <button class="ao3c-currency-btn" data-real="100">¥100</button>
+            <button class="ao3c-currency-btn" data-real="0.000001">₿ 0.000001</button>
+          </div>
+        </div>
+
+        <!-- BUY COINS TAB -->
+        <div class="ao3c-tab-panel ao3c-tab-hidden" id="ao3c-tab-bought">
+          <p class="ao3c-donate-sub">Purchase AO3 Coins. They go straight to your balance.</p>
+          <div class="ao3c-coin-packages">
+            <div class="ao3c-coin-pkg" data-buy-coins="100">
+              <div class="ao3c-coin-amt">100 🪙</div>
+              <div class="ao3c-coin-price">$0.99</div>
+              <button class="ao3c-buy-btn">Buy</button>
+            </div>
+            <div class="ao3c-coin-pkg ao3c-coin-popular" data-buy-coins="500">
+              <div class="ao3c-coin-badge">POPULAR</div>
+              <div class="ao3c-coin-amt">500 🪙</div>
+              <div class="ao3c-coin-price">$3.99</div>
+              <button class="ao3c-buy-btn">Buy</button>
+            </div>
+            <div class="ao3c-coin-pkg" data-buy-coins="1200">
+              <div class="ao3c-coin-amt">1200 🪙</div>
+              <div class="ao3c-coin-price">$7.99</div>
+              <button class="ao3c-buy-btn">Buy</button>
+            </div>
+            <div class="ao3c-coin-pkg" data-buy-coins="3000">
+              <div class="ao3c-coin-amt">3000 🪙</div>
+              <div class="ao3c-coin-price">$17.99</div>
+              <button class="ao3c-buy-btn">Buy</button>
+            </div>
+          </div>
+          <p class="ao3c-fine-print">* Fake transaction. Coins are added to your local balance.</p>
+        </div>
+
+        <!-- MY COINS TAB -->
+        <div class="ao3c-tab-panel ao3c-tab-hidden" id="ao3c-tab-earned">
+          <p class="ao3c-donate-sub">Balance: <strong id="ao3c-coin-bal">${balance} 🪙</strong></p>
+
+          <p style="font-size:0.8rem;font-weight:bold;color:#333;margin:10px 0 4px">Donate to AO3:</p>
+          <div class="ao3c-donate-coin-row">
+            <input type="number" id="ao3c-coin-amount" class="ao3c-coin-input"
+              min="1" max="${balance}" value="${Math.min(50, balance)}"
+              placeholder="Amount" />
+            <span style="font-size:0.9rem">🪙</span>
+            <button class="ao3c-btn ao3c-btn-gold" id="ao3c-donate-coins"
+              ${balance < 1 ? 'disabled' : ''}>Donate to AO3</button>
+          </div>
+          ${balance < 1 ? '<p style="font-size:0.78rem;color:#c00;margin-top:4px">Not enough coins. Earn some first!</p>' : ''}
+
+          <p style="font-size:0.8rem;font-weight:bold;color:#333;margin:14px 0 4px">Daily tasks:</p>
+          <div class="ao3c-tasks" id="ao3c-tasks-list">${tasksHtml}</div>
+        </div>
+
+        <button class="ao3c-btn ao3c-btn-ghost" id="ao3c-donate-cl" style="margin-top:12px">Maybe next time</button>
+        <p class="ao3c-fine-print">* AO3 Coins are not real. No money is transferred. This is a joke extension.</p>
+      </div>
+    `);
+
+    // Tab switching
+    modal.querySelectorAll('.ao3c-tab-btn').forEach(tabBtn => {
+      tabBtn.addEventListener('click', () => {
+        modal.querySelectorAll('.ao3c-tab-btn').forEach(b => b.classList.remove('ao3c-tab-active'));
+        modal.querySelectorAll('.ao3c-tab-panel').forEach(p => p.classList.add('ao3c-tab-hidden'));
+        tabBtn.classList.add('ao3c-tab-active');
+        modal.querySelector(`#ao3c-tab-${tabBtn.dataset.tab}`)?.classList.remove('ao3c-tab-hidden');
+      });
+    });
+
+    // Real money buttons → success (no balance change, it's fake)
+    modal.querySelectorAll('.ao3c-currency-btn').forEach(btn => {
+      btn.addEventListener('click', () => showDonateSuccess(modal, overlay, 'author'));
+    });
+
+    // Buy coins → add to balance + show confirmation
+    modal.querySelectorAll('.ao3c-buy-btn').forEach(btn => {
+      btn.style.setProperty('pointer-events', 'all', 'important');
+      btn.style.setProperty('cursor', 'pointer', 'important');
+      btn.addEventListener('click', () => {
+        const pkg   = btn.closest('[data-buy-coins]');
+        const coins = parseInt(pkg?.dataset.buyCoinS || pkg?.dataset.buyCoins || '0', 10);
+        if (!coins) return;
+        addCoins(coins);
+        // Update balance display in the tab
+        const balEl = modal.querySelector('#ao3c-coin-bal');
+        if (balEl) {
+          balEl.textContent = `${getCoinBalance()} 🪙`;
+          balEl.classList.add('ao3c-coin-flash');
+          setTimeout(() => balEl.classList.remove('ao3c-coin-flash'), 600);
+        }
+        // Update the coin input max
+        const inp = modal.querySelector('#ao3c-coin-amount');
+        if (inp) inp.max = getCoinBalance();
+        // Flash the buy button
+        btn.textContent = '✓ Added!';
+        btn.style.setProperty('background', '#43a047', 'important');
+        btn.style.setProperty('color', '#fff', 'important');
+        btn.disabled = true;
+        setTimeout(() => { btn.textContent = 'Buy'; btn.disabled = false; btn.style.removeProperty('background'); btn.style.removeProperty('color'); }, 1500);
+      });
+    });
+
+    // Donate coins to AO3 → deduct from balance
+    const donateBtn = modal.querySelector('#ao3c-donate-coins');
+    const coinInput = modal.querySelector('#ao3c-coin-amount');
+    if (donateBtn && coinInput) {
+      donateBtn.addEventListener('click', () => {
+        const amount = parseInt(coinInput.value, 10);
+        if (isNaN(amount) || amount < 1) { coinInput.style.border = '2px solid red'; return; }
+        if (amount > getCoinBalance()) { coinInput.style.border = '2px solid red'; return; }
+        coinInput.style.border = '';
+        spendCoins(amount);
+        showDonateSuccess(modal, overlay, 'ao3', amount);
+      });
+    }
+
+    modal.querySelector('#ao3c-donate-cl').addEventListener('click', () => overlay.remove());
+  }
+
+  function showDonateSuccess(modal, overlay, target, amount) {
+    const isAO3     = target === 'ao3';
+    const recipient = isAO3 ? 'AO3' : 'the author';
+    const coinNote  = isAO3 ? `<p>You donated <strong>${amount} 🪙</strong> to AO3. Your new balance: <strong>${getCoinBalance()} 🪙</strong></p>` : '';
+    modal.innerHTML = `
+      <div class="ao3c-modal-inner">
+        <div class="ao3c-big-icon">🎉</div>
+        <h2>Thank you for your donation!</h2>
+        <p>${recipient === 'AO3' ? 'AO3 thanks you. The servers are slightly warmer now.' : 'The author has been notified and is currently crying happy tears.'}</p>
+        ${coinNote}
+        <p class="ao3c-fine-print">* No actual transaction occurred. AO3 is a nonprofit. They don't take donations this way.</p>
+        <button class="ao3c-btn ao3c-btn-gold" id="ao3c-don-done">You're welcome!</button>
+      </div>`;
+    armButtons(modal);
+    modal.querySelector('#ao3c-don-done').addEventListener('click', () => overlay.remove());
+  }
+
+  // ============================================================
+  // INTRUSIVE ADS
+  // ============================================================
+
+  const POPUP_ADS = [
+    { brand: 'BET365',       color: '#006400', accent: '#FFD700', msg: 'You\'ve been reading for a while. Bet on something instead.', cta: 'Bet Now 🎰' },
+    { brand: 'DraftKings',   color: '#1a1a2e', accent: '#00d4aa', msg: 'Fantasy sports > fantasy fiction. (We said what we said.)', cta: 'Play Now' },
+    { brand: 'HelloFresh',   color: '#1a6b1a', accent: '#fff',    msg: 'You forgot to eat again, didn\'t you. 16 free meals waiting.', cta: 'Claim Offer 🥗' },
+    { brand: 'Ozempic',      color: '#1565c0', accent: '#fff',    msg: 'Ask your doctor about Ozempic. Or don\'t. We\'re an ad, not a cop.', cta: 'Learn More 💊' },
+    { brand: 'RAID: Shadow', color: '#8B0000', accent: '#FFD700', msg: 'Download RAID: Shadow Legends. The AO3 fandom has already written 47 fics about it.', cta: 'Download FREE' },
+    { brand: 'NordVPN',      color: '#222b68', accent: '#f8c10a', msg: 'Your ISP can see you reading fic right now. Just saying.', cta: 'Get Protected 🔒' },
+    { brand: 'Grammarly',    color: '#15572b', accent: '#f5c518', msg: 'Great fic. The comma usage, however...', cta: 'Fix My Commas ✏️' },
+    { brand: 'Duolingo',     color: '#58cc02', accent: '#fff',    msg: 'You haven\'t practiced today. The owl knows.', cta: 'Don\'t Miss a Day 🦉' },
+  ];
+
+  const VIDEO_AD_BRANDS = ['BET365', 'DRAFTKINGS', 'FANDUEL', 'POKERSTARS', 'BETWAY'];
+
+  let _popupAdIdx = 0;
+  let _intrusiveAdsStarted = false;
+
+  function startIntrusiveAds() {
+    if (_intrusiveAdsStarted || isPremium()) return;
+    _intrusiveAdsStarted = true;
+
+    // 1. Pop-up ad: first after 40s, then every 3 minutes
+    setTimeout(function schedulePopup() {
+      if (!isPremium()) {
+        showRandomPopupAd();
+        setTimeout(schedulePopup, 180000); // 3 min
+      }
+    }, 40000);
+
+    // 2. Fake video ad: first after 90s, then every 5 minutes
+    setTimeout(function scheduleVideo() {
+      if (!isPremium()) {
+        showFakeVideoAd();
+        setTimeout(scheduleVideo, 300000); // 5 min
+      }
+    }, 90000);
+
+    // 3. Sticky banner after 15s
+    setTimeout(() => { if (!isPremium()) injectStickyBanner(); }, 15000);
+
+    // 4. Interstitial: every 5th internal link click (was every 3rd)
+    hookInterstitialAds();
+  }
+
+  function showRandomPopupAd() {
+    const ad = POPUP_ADS[_popupAdIdx++ % POPUP_ADS.length];
+    // Free: 5s delay. Plus: 2s delay. All users CAN close it.
+    const delaySecs = isPlus() ? 2 : 5;
+
+    const { overlay, modal } = createOverlay(`
+      <div class="ao3c-intrusive-popup" style="background:${ad.color};border-color:${ad.accent}">
+        <div class="ao3c-intrusive-tag">⚠️ Important Message from Our Sponsors</div>
+        <div class="ao3c-intrusive-brand" style="color:${ad.accent}">${ad.brand}</div>
+        <p class="ao3c-intrusive-msg">${ad.msg}</p>
+        <button class="ao3c-btn ao3c-btn-gold" id="ao3c-inad-cta">${ad.cta}</button>
+        <button class="ao3c-btn ao3c-btn-ghost ao3c-intrusive-close" id="ao3c-inad-cl" style="color:#aaa;border-color:#555" disabled>
+          Close in ${delaySecs}s…
+        </button>
+      </div>
+    `);
+
+    const closeBtn = modal.querySelector('#ao3c-inad-cl');
+    const ctaBtn   = modal.querySelector('#ao3c-inad-cta');
+
+    // Countdown before close unlocks
+    let secs = delaySecs;
+    const t = setInterval(() => {
+      secs--;
+      if (secs <= 0) {
+        clearInterval(t);
+        closeBtn.disabled = false;
+        closeBtn.textContent = isPlus() ? 'Close' : 'Close (finally)';
+        closeBtn.style.setProperty('opacity', '1', 'important');
+        closeBtn.style.setProperty('pointer-events', 'all', 'important');
+        closeBtn.style.setProperty('cursor', 'pointer', 'important');
+      } else {
+        closeBtn.textContent = `Close in ${secs}s…`;
+      }
+    }, 1000);
+
+    ctaBtn.addEventListener('click', () => overlay.remove());
+    closeBtn.addEventListener('click', () => { if (!closeBtn.disabled) overlay.remove(); });
+  }
+
+  function showFakeVideoAd() {
+    // Plus: skip after 3s. Free: skip after 8s.
+    const skipAfter = isPlus() ? 3 : 8;
+    const brand = VIDEO_AD_BRANDS[Math.floor(Math.random() * VIDEO_AD_BRANDS.length)];
+
+    const { overlay, modal } = createOverlay(`
+      <div class="ao3c-video-ad">
+        <div class="ao3c-video-screen">
+          <div class="ao3c-video-brand">${brand}</div>
+          <div class="ao3c-video-tagline">EXPERIENCE THE THRILL<br>OF COMPLETELY LEGAL GAMBLING</div>
+          <div class="ao3c-video-progress-wrap"><div class="ao3c-video-progress" id="ao3c-vid-prog"></div></div>
+        </div>
+        <div class="ao3c-video-controls">
+          <span class="ao3c-video-label">Advertisement</span>
+          <div>
+            <span id="ao3c-skip-countdown" class="ao3c-skip-countdown">Skip in ${skipAfter}s</span>
+            <button class="ao3c-btn ao3c-btn-ghost ao3c-skip-btn" id="ao3c-vid-skip" disabled>Skip Ad ▶▶</button>
+          </div>
+        </div>
+        <p class="ao3c-fine-print">Your video will resume after this message. (There is no video.)</p>
+      </div>
+    `);
+
+    let secs = skipAfter;
+    const prog      = modal.querySelector('#ao3c-vid-prog');
+    const skipBtn   = modal.querySelector('#ao3c-vid-skip');
+    const cdEl      = modal.querySelector('#ao3c-skip-countdown');
+
+    const t = setInterval(() => {
+      secs--;
+      if (prog) prog.style.width = `${((skipAfter - secs) / skipAfter) * 100}%`;
+      if (secs <= 0) {
+        clearInterval(t);
+        skipBtn.disabled = false;
+        skipBtn.style.setProperty('opacity', '1', 'important');
+        skipBtn.style.setProperty('pointer-events', 'all', 'important');
+        skipBtn.style.setProperty('cursor', 'pointer', 'important');
+        cdEl.textContent = '';
+      } else {
+        cdEl.textContent = `Skip in ${secs}s`;
+      }
+    }, 1000);
+
+    skipBtn.addEventListener('click', () => { if (!skipBtn.disabled) overlay.remove(); });
+  }
+
+  function injectStickyBanner() {
+    if (document.querySelector('.ao3c-sticky-banner')) return;
+    const banner = el('div', 'ao3c-sticky-banner');
+    const ad = GAMBLING_ADS[Math.floor(Math.random() * GAMBLING_ADS.length)];
+    banner.style.cssText = `background:${ad.color[0]};border-top:2px solid ${ad.accent}`;
+    // Everyone can close it — Plus gets instant close, free gets 8s delay
+    const closeSecs = isPlus() ? 0 : 8;
+    banner.innerHTML = `
+      <span class="ao3c-sticky-brand" style="color:${ad.accent}">${ad.brand}</span>
+      <span class="ao3c-sticky-offer">${ad.offer}</span>
+      <button class="ao3c-sticky-cta" style="border-color:${ad.accent};color:${ad.accent}">Bet Now</button>
+      <button class="ao3c-sticky-close" id="ao3c-sticky-x" ${closeSecs > 0 ? 'disabled' : ''}>${closeSecs > 0 ? `✕ (${closeSecs}s)` : '✕'}</button>
+    `;
+    banner.querySelectorAll('button').forEach(b => {
+      b.style.setProperty('pointer-events', 'all', 'important');
+      b.style.setProperty('cursor', 'pointer', 'important');
+    });
+    const xBtn = banner.querySelector('#ao3c-sticky-x');
+    if (closeSecs > 0) {
+      let s = closeSecs;
+      const t = setInterval(() => {
+        s--;
+        if (s <= 0) { clearInterval(t); xBtn.disabled = false; xBtn.textContent = '✕'; xBtn.style.setProperty('cursor','pointer','important'); }
+        else xBtn.textContent = `✕ (${s}s)`;
+      }, 1000);
+    }
+    xBtn.addEventListener('click', () => { if (!xBtn.disabled) banner.remove(); });
+    document.body.appendChild(banner);
+  }
+
+  function hookInterstitialAds() {
+    let clickCount = 0;
+    document.addEventListener('click', e => {
+      const link = e.target.closest('a[href]');
+      if (!link) return;
+      const href = link.getAttribute('href');
+      if (!href || href.startsWith('#') || href.startsWith('javascript')) return;
+      if (!href.includes('archiveofourown') && !href.startsWith('/')) return;
+      clickCount++;
+      if (clickCount % 5 !== 0) return; // every 5th click (was 3rd)
+      e.preventDefault();
+      showInterstitialAd(href);
+    });
+  }
+
+  function showInterstitialAd(destination) {
+    const ad = GAMBLING_ADS[Math.floor(Math.random() * GAMBLING_ADS.length)];
+    const skipSecs = isPlus() ? 2 : 5;
+
+    const { overlay, modal } = createOverlay(`
+      <div class="ao3c-interstitial" style="background:linear-gradient(135deg,${ad.color[0]},${ad.color[1]});border-color:${ad.accent}">
+        <div class="ao3c-interstitial-tag">You're leaving this page — here's an ad first</div>
+        <div class="ao3c-interstitial-brand" style="color:${ad.accent}">${ad.brand}</div>
+        <div class="ao3c-interstitial-offer" style="color:${ad.accent}">${ad.offer}</div>
+        <div class="ao3c-interstitial-sub">${ad.sub}</div>
+        <div class="ao3c-interstitial-controls">
+          <span id="ao3c-inter-cd" class="ao3c-skip-countdown">Continuing in ${skipSecs}s…</span>
+          <button class="ao3c-btn ao3c-btn-ghost" id="ao3c-inter-skip" disabled style="color:#fff;border-color:#fff">Continue ▶</button>
+        </div>
+      </div>
+    `);
+
+    let secs = skipSecs;
+    const cd      = modal.querySelector('#ao3c-inter-cd');
+    const skipBtn = modal.querySelector('#ao3c-inter-skip');
+    const t = setInterval(() => {
+      secs--;
+      if (secs <= 0) {
+        clearInterval(t);
+        cd.textContent = '';
+        skipBtn.disabled = false;
+        skipBtn.style.setProperty('pointer-events', 'all', 'important');
+        skipBtn.style.setProperty('cursor', 'pointer', 'important');
+      } else {
+        cd.textContent = `Continuing in ${secs}s…`;
+      }
+    }, 1000);
+    skipBtn.addEventListener('click', () => {
+      if (!skipBtn.disabled) { overlay.remove(); window.location.href = destination; }
+    });
+  }
+
+  // ============================================================
+  // FAKE FACE SCAN — age check on first visit, locks forever
+  // ============================================================
+
+  // Works that are "age-restricted" = those whose workId % 3 === 0 (roughly 1/3)
+  function isAgeRestrictedWork(workId) {
+    const n = parseInt(workId, 10);
+    return !isNaN(n) && n % 3 === 0;
+  }
+
+  function getScannedAge() { return getStore().faceAge || null; }
+
+  function checkFaceScan() {
+    if (getScannedAge() !== null) {
+      // Already scanned — enforce restrictions on work pages
+      enforceFaceAgeRestrictions();
+      return;
+    }
+    // First visit — show the face scan prompt after a short delay
+    setTimeout(showFaceScanPrompt, 1500);
+  }
+
+  function showFaceScanPrompt() {
+    if (document.querySelector('.ao3c-facescan-overlay')) return;
+    const { overlay, modal } = createOverlay(`
+      <div class="ao3c-facescan-popup">
+        <div class="ao3c-big-icon">📸</div>
+        <h2>Age Verification Required</h2>
+        <p>AO3 now requires a one-time biometric age scan to ensure a safe browsing experience.<br>
+           <strong>Your scan is stored locally and never shared.</strong></p>
+        <div id="ao3c-fs-step-1">
+          <div class="ao3c-cam-frame" id="ao3c-cam-frame">
+            <div class="ao3c-cam-placeholder">
+              <div class="ao3c-cam-icon">📷</div>
+              <p class="ao3c-cam-hint">Camera access needed</p>
+            </div>
+          </div>
+          <div class="ao3c-btn-row" style="margin-top:14px">
+            <button class="ao3c-btn ao3c-btn-gold" id="ao3c-fs-allow">Allow Camera &amp; Continue</button>
+            <button class="ao3c-btn ao3c-btn-ghost" id="ao3c-fs-skip">Skip (limited access)</button>
+          </div>
+          <p class="ao3c-fine-print">Camera is not actually accessed. This is a fake scan.</p>
+        </div>
+        <div id="ao3c-fs-step-2" style="display:none">
+          <div class="ao3c-facescan-anim" id="ao3c-fs-anim">
+            <div class="ao3c-fs-face">🧑</div>
+            <div class="ao3c-fs-scanline"></div>
+            <div class="ao3c-fs-corner ao3c-fs-tl"></div>
+            <div class="ao3c-fs-corner ao3c-fs-tr"></div>
+            <div class="ao3c-fs-corner ao3c-fs-bl"></div>
+            <div class="ao3c-fs-corner ao3c-fs-br"></div>
+          </div>
+          <p class="ao3c-fs-status" id="ao3c-fs-status">Initialising camera feed…</p>
+          <div class="ao3c-scan-bar" style="max-width:240px;margin:10px auto"><div class="ao3c-fs-progress"></div></div>
+        </div>
+        <div id="ao3c-fs-step-3" style="display:none">
+          <div class="ao3c-fs-result-box">
+            <div class="ao3c-big-icon">✅</div>
+            <h3>Scan Complete</h3>
+            <p>Detected age: <strong id="ao3c-fs-age-display">—</strong></p>
+            <p class="ao3c-fine-print">This result is final. Reset in extension settings.</p>
+          </div>
+          <button class="ao3c-btn ao3c-btn-gold" id="ao3c-fs-confirm">Confirm &amp; Continue</button>
+        </div>
+      </div>
+    `);
+
+    const step1 = modal.querySelector('#ao3c-fs-step-1');
+    const step2 = modal.querySelector('#ao3c-fs-step-2');
+    const step3 = modal.querySelector('#ao3c-fs-step-3');
+
+    modal.querySelector('#ao3c-fs-allow').addEventListener('click', () => {
+      // Fake camera request animation
+      const camFrame = modal.querySelector('#ao3c-cam-frame');
+      camFrame.innerHTML = `<div class="ao3c-cam-live"><div class="ao3c-cam-dot"></div>LIVE</div><div class="ao3c-cam-feed">😐</div>`;
+      setTimeout(() => {
+        step1.style.display = 'none';
+        step2.style.display = 'block';
+        runFaceScanAnimation(modal, step2, step3);
+      }, 800);
+    });
+
+    modal.querySelector('#ao3c-fs-skip').addEventListener('click', () => {
+      // Skipping = treated as "unknown age" = restrictions apply
+      updateStore(d => { d.faceAge = 16; }); // assume under 18 if skipped
+      overlay.remove();
+      enforceFaceAgeRestrictions();
+    });
+
+    modal.querySelector('#ao3c-fs-confirm')?.addEventListener('click', () => {
+      overlay.remove();
+      enforceFaceAgeRestrictions();
+    });
+  }
+
+  function runFaceScanAnimation(modal, step2, step3) {
+    const statusEl   = modal.querySelector('#ao3c-fs-status');
+    const progressEl = modal.querySelector('.ao3c-fs-progress');
+    const steps = [
+      [600,  'Detecting facial landmarks…'],
+      [1200, 'Analysing bone structure…'],
+      [1900, 'Cross-referencing neural age model…'],
+      [2600, 'Calculating epidermal wear patterns…'],
+      [3200, 'Consulting the vibes…'],
+      [3700, 'Finalising result…'],
+    ];
+    steps.forEach(([delay, msg]) => {
+      setTimeout(() => {
+        if (statusEl) statusEl.textContent = msg;
+        if (progressEl) progressEl.style.width = `${(delay / 3700) * 100}%`;
+      }, delay);
+    });
+    setTimeout(() => {
+      // Generate a random age 14–42, skewed towards 18–30
+      const ages = [14,15,16,17,18,18,19,19,20,20,21,21,22,23,24,25,26,27,28,29,30,31,32,34,36,38,42];
+      const age = ages[Math.floor(Math.random() * ages.length)];
+      updateStore(d => { d.faceAge = age; });
+      step2.style.display = 'none';
+      step3.style.display = 'block';
+      const ageEl = modal.querySelector('#ao3c-fs-age-display');
+      if (ageEl) ageEl.textContent = `${age} years old`;
+      armButtons(modal);
+      modal.querySelector('#ao3c-fs-confirm').addEventListener('click', () => {
+        modal.closest('.ao3c-overlay-wrap, body > div')?.remove();
+        enforceFaceAgeRestrictions();
+      });
+    }, 4000);
+  }
+
+  function enforceFaceAgeRestrictions() {
+    const age = getScannedAge();
+    if (age === null || age >= 18) return;
+
+    // On work listing pages — blur ~1/3 of works with an age gate
+    document.querySelectorAll('li.work.blurb').forEach(work => {
+      if (work.querySelector('.ao3c-age-gate')) return;
+      const workId = work.id.replace(/^work[_-]/, '');
+      if (!isAgeRestrictedWork(workId)) return;
+      const gate = el('div', 'ao3c-age-gate');
+      gate.innerHTML = `
+        <div class="ao3c-age-gate-inner">
+          🔞 <strong>Age Restricted</strong>
+          <span>Our scan detected you are ${age}. This content requires 18+.</span>
+          <button class="ao3c-age-gate-appeal">Appeal Result</button>
+        </div>`;
+      gate.querySelector('.ao3c-age-gate-appeal').addEventListener('click', () => showAgeAppealPopup());
+      gate.querySelector('.ao3c-age-gate-appeal').style.setProperty('pointer-events', 'all', 'important');
+      gate.querySelector('.ao3c-age-gate-appeal').style.setProperty('cursor', 'pointer', 'important');
+      // Blur the work content
+      work.style.setProperty('filter', 'blur(4px)', 'important');
+      work.style.setProperty('pointer-events', 'none', 'important');
+      work.style.setProperty('user-select', 'none', 'important');
+      work.parentNode.insertBefore(gate, work);
+      gate.style.setProperty('pointer-events', 'all', 'important');
+    });
+
+    // On work detail pages
+    const workId = getWorkIdFromUrl();
+    if (workId && isAgeRestrictedWork(workId)) {
+      const workskin = document.querySelector('#workskin');
+      if (workskin && !document.querySelector('.ao3c-age-gate-full')) {
+        const gate = el('div', 'ao3c-age-gate-full');
+        gate.innerHTML = `
+          <div class="ao3c-age-gate-full-inner">
+            <div class="ao3c-big-icon">🔞</div>
+            <h2>Age Restricted Content</h2>
+            <p>Our biometric scan determined you are <strong>${age} years old</strong>.<br>
+               This content is restricted to users 18 and over.</p>
+            <button class="ao3c-btn ao3c-btn-ghost" id="ao3c-age-appeal">Appeal This Result</button>
+            <p class="ao3c-fine-print">To reset your age scan, go to Extension Settings → Reset Face Scan.</p>
+          </div>`;
+        workskin.style.setProperty('filter', 'blur(12px)', 'important');
+        workskin.style.setProperty('pointer-events', 'none', 'important');
+        workskin.parentNode.insertBefore(gate, workskin);
+        gate.querySelector('#ao3c-age-appeal').addEventListener('click', showAgeAppealPopup);
+        gate.querySelector('#ao3c-age-appeal').style.setProperty('pointer-events','all','important');
+        gate.querySelector('#ao3c-age-appeal').style.setProperty('cursor','pointer','important');
+      }
+    }
+  }
+
+  function showAgeAppealPopup() {
+    const { overlay, modal } = createOverlay(`
+      <div class="ao3c-modal-inner">
+        <div class="ao3c-big-icon">📋</div>
+        <h2>Age Scan Appeal</h2>
+        <p>Our algorithm is 100% accurate and cannot be appealed.</p>
+        <p>If you believe this is an error, please consider:</p>
+        <ul style="text-align:left;font-size:0.88rem;margin:10px 0 16px;padding-left:20px">
+          <li>Getting more sleep (you look tired)</li>
+          <li>Drinking more water</li>
+          <li>Submitting form AO3-AGE-7743 in triplicate</li>
+          <li>Waiting until you are actually 18</li>
+        </ul>
+        <p class="ao3c-fine-print">To reset: Extension settings → Reset Face Scan.</p>
+        <button class="ao3c-btn ao3c-btn-ghost" id="ao3c-appeal-cl">Close</button>
+      </div>
+    `);
+    modal.querySelector('#ao3c-appeal-cl').addEventListener('click', () => overlay.remove());
+  }
 
   function init() {
     checkReadingLimit();
     checkAgeVerification();
+    checkFaceScan();
     checkReadingCaptcha();
     injectSlotAds();
     addPremiumOverlays();
@@ -1422,6 +2388,11 @@
     addSpoilerBlur();
     addAuthorTypingIndicator();
     addReadingSpeedEstimate();
+    addDonateButtons();
+    hookCoinTaskEvents();
+    startIntrusiveAds();
+    // Award "read a fic" coin when on a work page
+    if (getWorkIdFromUrl()) completeTask('read_fic');
     runEscalationEffects();
   }
 

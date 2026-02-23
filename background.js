@@ -12,22 +12,14 @@ function isAO3Tab(url) {
   return AO3_URLS.some(d => url.includes(d));
 }
 
-// Write data directly into a tab's localStorage — the RELIABLE reset method.
-// Works both in MV2 (Firefox) and MV3 (Chrome).
+// Write data directly into a tab's localStorage — MV2 (Firefox) version.
 function writeLocalStorageOnTab(tabId, data) {
   const code = `(function(){try{localStorage.setItem(${JSON.stringify(STORAGE_KEY)},${JSON.stringify(JSON.stringify(data))});}catch(e){}})();`;
   try {
-    if (typeof chrome.scripting !== 'undefined') {
-      // MV3 Chrome
-      chrome.scripting.executeScript({
-        target: { tabId },
-        func: (key, val) => { try { localStorage.setItem(key, val); } catch(e) {} },
-        args: [STORAGE_KEY, JSON.stringify(data)],
-      }).catch(() => {});
-    } else {
-      // MV2 Firefox
-      chrome.tabs.executeScript(tabId, { code }).catch?.(() => {});
-    }
+    chrome.tabs.executeScript(tabId, { code }, () => {
+      // ignore errors from tabs without content script access
+      if (chrome.runtime.lastError) {}
+    });
   } catch(e) {}
 }
 

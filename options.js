@@ -75,7 +75,13 @@ async function render() {
   document.getElementById('reads-today').textContent = `${reads[today] || 0} / ${limits[tier]}`;
   document.getElementById('reads-limit').textContent = tier === 'premium' ? 'Unlimited ✓' : limits[tier] + ' fics';
 
-  // Trophies
+  // Face scan age
+  const faceAgeEl = document.getElementById('face-age-display');
+  if (faceAgeEl) {
+    faceAgeEl.textContent = store.faceAge != null
+      ? `${store.faceAge} years old`
+      : 'Not yet scanned';
+  }
   const trophies = store.trophies || {};
   const entries  = Object.entries(trophies);
   const list = document.getElementById('trophies-list');
@@ -96,6 +102,14 @@ async function render() {
 }
 
 // Button handlers
+document.getElementById('btn-reset-face').addEventListener('click', async () => {
+  const store = await getAO3Store();
+  delete store.faceAge;
+  await setAO3Store(store);
+  render();
+  showToast('📸 Face scan reset. Will trigger on next AO3 visit.');
+});
+
 document.getElementById('btn-reset-tier').addEventListener('click', async () => {
   const store = await getAO3Store();
   delete store.tier;

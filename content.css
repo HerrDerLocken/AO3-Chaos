@@ -582,3 +582,276 @@
   font-size: 0.85rem !important;
 }
 .ao3c-read-time-note { color: #999 !important; font-style: italic !important; font-size: 0.75rem !important; }
+
+/* ---- AUTHOR INFO POPUP ---- */
+.ao3c-author-info-grid {
+  width: 100% !important;
+  margin: 14px 0 !important;
+  border: 1px solid #eee !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  text-align: left !important;
+}
+.ao3c-info-row {
+  display: flex !important;
+  gap: 12px !important;
+  padding: 8px 14px !important;
+  border-bottom: 1px solid #f0f0f0 !important;
+  align-items: flex-start !important;
+  font-size: 0.88rem !important;
+}
+.ao3c-info-row:last-child { border-bottom: none !important; }
+.ao3c-info-label {
+  min-width: 120px !important;
+  font-weight: bold !important;
+  color: #555 !important;
+  flex-shrink: 0 !important;
+}
+.ao3c-info-val { color: #222 !important; }
+
+/* ---- WHAT ARE THE MODS DOING ---- */
+.ao3c-nav-mods a { color: #7b1fa2 !important; font-weight: bold !important; }
+.ao3c-mods-popup { text-align: left !important; }
+.ao3c-mods-popup h2 { text-align: center !important; }
+.ao3c-mods-meta { font-size: 0.88rem !important; color: #555 !important; margin: 10px 0 16px !important; line-height: 1.8 !important; text-align: center !important; }
+.ao3c-mod-activities { display: flex !important; flex-direction: column !important; gap: 8px !important; margin: 10px 0 !important; }
+.ao3c-mod-row { display: flex !important; align-items: center !important; gap: 10px !important; font-size: 0.85rem !important; }
+.ao3c-mod-activity { flex: 1 !important; color: #333 !important; }
+.ao3c-mod-bar-wrap { width: 120px !important; height: 10px !important; background: #eee !important; border-radius: 5px !important; overflow: hidden !important; flex-shrink: 0 !important; }
+.ao3c-mod-bar { height: 100% !important; background: linear-gradient(90deg, #7b1fa2, #ce93d8) !important; border-radius: 5px !important; transition: width 0.6s ease !important; }
+.ao3c-mod-pct { min-width: 34px !important; text-align: right !important; font-weight: bold !important; color: #7b1fa2 !important; font-size: 0.82rem !important; }
+
+/* ---- DONATE BUTTON ---- */
+.ao3c-donate-btn {
+  box-sizing: border-box !important;
+  background: linear-gradient(135deg, #43a047, #2e7d32) !important;
+  border: none !important; border-radius: 5px !important; color: #fff !important;
+  font-size: 0.83rem !important; padding: 6px 14px 8px !important;
+  font-family: Arial, Helvetica, sans-serif !important; line-height: 1.8 !important;
+  height: auto !important; overflow: visible !important; cursor: pointer !important;
+  margin: 5px 0 !important; display: inline-block !important;
+  appearance: none !important; -webkit-appearance: none !important;
+  box-shadow: 0 2px 8px rgba(46,125,50,0.4) !important;
+}
+.ao3c-donate-btn:hover { opacity: 0.85 !important; }
+.ao3c-donate-btn-lg { font-size: 0.95rem !important; padding: 8px 20px 10px !important; margin: 10px 0 !important; }
+
+/* ---- DONATE POPUP ---- */
+.ao3c-donate-popup { text-align: left !important; }
+.ao3c-donate-popup h2 { text-align: center !important; }
+.ao3c-donate-popup > p { text-align: center !important; }
+.ao3c-donate-sub { font-size: 0.85rem !important; color: #555 !important; margin: 10px 0 8px !important; }
+.ao3c-donate-tabs { display: flex !important; gap: 6px !important; flex-wrap: wrap !important; margin: 14px 0 10px !important; justify-content: center !important; }
+.ao3c-tab-btn {
+  background: #f0f0f0 !important; border: 1.5px solid #ddd !important; border-radius: 16px !important;
+  padding: 5px 14px !important; font-size: 0.8rem !important; cursor: pointer !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+.ao3c-tab-btn.ao3c-tab-active { background: #2e7d32 !important; color: #fff !important; border-color: #2e7d32 !important; }
+.ao3c-tab-panel { min-height: 120px !important; }
+.ao3c-tab-hidden { display: none !important; }
+.ao3c-currency-grid { display: grid !important; grid-template-columns: repeat(5, 1fr) !important; gap: 6px !important; margin: 8px 0 !important; }
+.ao3c-currency-btn {
+  background: #f5f5f5 !important; border: 1.5px solid #ddd !important; border-radius: 6px !important;
+  padding: 6px 4px !important; font-size: 0.78rem !important; cursor: pointer !important;
+  font-family: Arial, Helvetica, sans-serif !important; text-align: center !important;
+  transition: background 0.15s !important;
+}
+.ao3c-currency-btn:hover { background: #e8f5e9 !important; border-color: #43a047 !important; }
+.ao3c-coin-packages { display: flex !important; gap: 10px !important; flex-wrap: wrap !important; margin: 8px 0 !important; justify-content: center !important; }
+.ao3c-coin-pkg { border: 1.5px solid #ddd !important; border-radius: 8px !important; padding: 10px !important; text-align: center !important; min-width: 90px !important; position: relative !important; }
+.ao3c-coin-popular { border-color: #FFD700 !important; background: #fffbea !important; }
+.ao3c-coin-badge { position: absolute !important; top: -10px !important; left: 50% !important; transform: translateX(-50%) !important; background: #FFD700 !important; color: #222 !important; font-size: 0.6rem !important; font-weight: bold !important; padding: 1px 8px !important; border-radius: 8px !important; white-space: nowrap !important; }
+.ao3c-coin-amt { font-size: 1rem !important; font-weight: bold !important; margin-bottom: 4px !important; }
+.ao3c-coin-price { font-size: 0.8rem !important; color: #666 !important; margin-bottom: 8px !important; }
+.ao3c-tasks { display: flex !important; flex-direction: column !important; gap: 6px !important; margin: 8px 0 !important; }
+.ao3c-task-row { display: flex !important; align-items: center !important; gap: 8px !important; font-size: 0.83rem !important; padding: 4px 0 !important; }
+.ao3c-task-done { color: #555 !important; }
+.ao3c-task-done span:nth-child(2) { text-decoration: line-through !important; }
+.ao3c-task-reward { margin-left: auto !important; color: #2e7d32 !important; font-weight: bold !important; font-size: 0.78rem !important; }
+
+/* ---- INTRUSIVE POP-UP AD ---- */
+.ao3c-intrusive-popup {
+  border-width: 2px !important; border-style: solid !important; border-radius: 10px !important;
+  padding: 24px 28px !important; text-align: center !important;
+  animation: ao3c-bounce 0.3s ease !important;
+}
+.ao3c-intrusive-tag { font-size: 0.65rem !important; color: rgba(255,255,255,0.5) !important; margin-bottom: 10px !important; text-transform: uppercase !important; letter-spacing: 1px !important; }
+.ao3c-intrusive-brand { font-size: 2rem !important; font-weight: 900 !important; letter-spacing: 2px !important; margin-bottom: 8px !important; text-shadow: 0 0 12px currentColor !important; }
+.ao3c-intrusive-msg { color: rgba(255,255,255,0.9) !important; font-size: 0.95rem !important; margin: 12px 0 18px !important; line-height: 1.5 !important; }
+.ao3c-intrusive-close { margin-top: 8px !important; }
+
+/* ---- FAKE VIDEO AD ---- */
+.ao3c-video-ad { text-align: center !important; }
+.ao3c-video-screen {
+  background: #000 !important; border-radius: 8px !important; padding: 40px 20px !important;
+  margin-bottom: 12px !important; min-height: 160px !important;
+  display: flex !important; flex-direction: column !important;
+  align-items: center !important; justify-content: center !important; gap: 12px !important;
+}
+.ao3c-video-brand { font-size: 2.2rem !important; font-weight: 900 !important; color: #FFD700 !important; letter-spacing: 3px !important; text-shadow: 0 0 20px rgba(255,215,0,0.7) !important; }
+.ao3c-video-tagline { font-size: 0.85rem !important; color: rgba(255,255,255,0.7) !important; letter-spacing: 1px !important; text-align: center !important; }
+.ao3c-video-progress-wrap { width: 100% !important; height: 4px !important; background: rgba(255,255,255,0.2) !important; border-radius: 2px !important; margin-top: 10px !important; }
+.ao3c-video-progress { height: 100% !important; background: #FFD700 !important; border-radius: 2px !important; width: 0% !important; transition: width 1s linear !important; }
+.ao3c-video-controls { display: flex !important; justify-content: space-between !important; align-items: center !important; padding: 4px 0 !important; }
+.ao3c-video-label { font-size: 0.72rem !important; color: #999 !important; }
+.ao3c-skip-countdown { font-size: 0.8rem !important; color: #aaa !important; margin-right: 8px !important; }
+.ao3c-skip-btn { padding: 6px 14px !important; font-size: 0.8rem !important; min-width: unset !important; min-height: unset !important; }
+.ao3c-skip-btn:disabled { opacity: 0.35 !important; cursor: not-allowed !important; }
+
+/* ---- STICKY BANNER ---- */
+.ao3c-sticky-banner {
+  position: fixed !important; bottom: 0 !important; left: 0 !important; right: 0 !important;
+  z-index: 9999998 !important; display: flex !important; align-items: center !important;
+  gap: 14px !important; padding: 8px 20px !important; flex-wrap: wrap !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+  box-shadow: 0 -3px 16px rgba(0,0,0,0.5) !important;
+}
+.ao3c-sticky-brand { font-weight: 900 !important; font-size: 0.9rem !important; letter-spacing: 1px !important; text-transform: uppercase !important; }
+.ao3c-sticky-offer { flex: 1 !important; font-size: 0.82rem !important; color: rgba(255,255,255,0.85) !important; }
+.ao3c-sticky-cta {
+  background: transparent !important; border-width: 1.5px !important; border-style: solid !important;
+  border-radius: 4px !important; padding: 4px 14px !important; font-size: 0.8rem !important;
+  font-weight: bold !important; cursor: pointer !important; white-space: nowrap !important;
+}
+.ao3c-sticky-close {
+  background: transparent !important; border: none !important; color: rgba(255,255,255,0.5) !important;
+  font-size: 1.1rem !important; cursor: pointer !important; padding: 0 4px !important;
+  line-height: 1 !important;
+}
+.ao3c-sticky-nope { color: rgba(255,255,255,0.25) !important; font-size: 0.75rem !important; cursor: not-allowed !important; title: 'Plus only' !important; }
+
+/* ---- INTERSTITIAL AD ---- */
+.ao3c-interstitial {
+  border-width: 2px !important; border-style: solid !important; border-radius: 10px !important;
+  padding: 36px 28px !important; text-align: center !important; min-height: 260px !important;
+  display: flex !important; flex-direction: column !important; align-items: center !important;
+  justify-content: center !important; gap: 12px !important;
+}
+.ao3c-interstitial-tag { font-size: 0.65rem !important; color: rgba(255,255,255,0.4) !important; text-transform: uppercase !important; letter-spacing: 1px !important; }
+.ao3c-interstitial-brand { font-size: 2.5rem !important; font-weight: 900 !important; letter-spacing: 3px !important; text-shadow: 0 0 20px currentColor !important; }
+.ao3c-interstitial-offer { font-size: 1.1rem !important; font-weight: 900 !important; animation: ao3c-flash 1.2s ease-in-out infinite alternate !important; }
+.ao3c-interstitial-sub { font-size: 0.6rem !important; color: rgba(255,255,255,0.3) !important; max-width: 320px !important; }
+.ao3c-interstitial-controls { display: flex !important; align-items: center !important; gap: 12px !important; margin-top: 8px !important; }
+
+/* ---- COIN FLASH ---- */
+@keyframes ao3c-coin-flash {
+  0%,100% { color: inherit; }
+  40% { color: #f9a825; transform: scale(1.2); }
+}
+.ao3c-coin-flash { animation: ao3c-coin-flash 0.5s ease !important; }
+.ao3c-task-claim {
+  background: #e8f5e9 !important; border: 1.5px solid #43a047 !important;
+  border-radius: 10px !important; padding: 3px 10px !important; font-size: 0.75rem !important;
+  color: #2e7d32 !important; cursor: pointer !important; font-weight: bold !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+.ao3c-task-claim:hover { background: #c8e6c9 !important; }
+
+/* ---- FACE SCAN POPUP ---- */
+.ao3c-facescan-popup { text-align: center !important; }
+.ao3c-cam-frame {
+  width: 200px !important; height: 150px !important; margin: 14px auto !important;
+  border: 2px solid #ddd !important; border-radius: 10px !important; overflow: hidden !important;
+  background: #111 !important; display: flex !important; align-items: center !important;
+  justify-content: center !important; flex-direction: column !important;
+}
+.ao3c-cam-placeholder { text-align: center !important; color: #888 !important; }
+.ao3c-cam-icon { font-size: 2.5rem !important; display: block !important; margin-bottom: 6px !important; }
+.ao3c-cam-hint { font-size: 0.75rem !important; color: #666 !important; }
+.ao3c-cam-live {
+  display: flex !important; align-items: center !important; gap: 6px !important;
+  font-size: 0.7rem !important; color: #f44336 !important; font-weight: bold !important;
+  padding: 2px 6px !important; background: rgba(0,0,0,0.7) !important;
+  border-radius: 4px !important; position: absolute !important; top: 6px !important; right: 6px !important;
+}
+.ao3c-cam-dot {
+  width: 7px !important; height: 7px !important; border-radius: 50% !important;
+  background: #f44336 !important; animation: ao3c-flash 0.8s ease-in-out infinite alternate !important;
+}
+.ao3c-cam-feed { font-size: 4rem !important; }
+.ao3c-facescan-anim {
+  width: 160px !important; height: 160px !important; margin: 14px auto !important;
+  background: #000 !important; border-radius: 10px !important; position: relative !important;
+  display: flex !important; align-items: center !important; justify-content: center !important;
+  border: 2px solid #333 !important; overflow: hidden !important;
+}
+.ao3c-fs-face { font-size: 4rem !important; z-index: 2 !important; position: relative !important; }
+.ao3c-fs-scanline {
+  position: absolute !important; left: 0 !important; right: 0 !important; height: 2px !important;
+  background: rgba(0,255,0,0.7) !important; box-shadow: 0 0 8px rgba(0,255,0,0.9) !important;
+  animation: ao3c-scanline 1.8s linear infinite !important; z-index: 3 !important;
+}
+@keyframes ao3c-scanline {
+  0%   { top: 0; }
+  100% { top: 100%; }
+}
+.ao3c-fs-corner {
+  position: absolute !important; width: 18px !important; height: 18px !important;
+  border-color: #0f0 !important; border-style: solid !important; z-index: 4 !important;
+}
+.ao3c-fs-tl { top: 6px !important; left: 6px !important; border-width: 2px 0 0 2px !important; }
+.ao3c-fs-tr { top: 6px !important; right: 6px !important; border-width: 2px 2px 0 0 !important; }
+.ao3c-fs-bl { bottom: 6px !important; left: 6px !important; border-width: 0 0 2px 2px !important; }
+.ao3c-fs-br { bottom: 6px !important; right: 6px !important; border-width: 0 2px 2px 0 !important; }
+.ao3c-fs-status { font-size: 0.82rem !important; color: #0f0 !important; font-family: monospace !important; margin: 8px 0 !important; }
+.ao3c-fs-progress {
+  height: 8px !important; background: #0f0 !important; border-radius: 4px !important;
+  width: 0% !important; transition: width 0.6s ease !important;
+  box-shadow: 0 0 6px rgba(0,255,0,0.5) !important;
+}
+.ao3c-fs-result-box {
+  background: #f0fff0 !important; border: 1.5px solid #43a047 !important;
+  border-radius: 8px !important; padding: 16px !important; margin: 12px 0 !important;
+}
+
+/* ---- AGE GATE ---- */
+.ao3c-age-gate {
+  background: #fff3e0 !important; border: 2px solid #ff6f00 !important;
+  border-radius: 6px !important; margin: 4px 0 !important; padding: 10px 16px !important;
+}
+.ao3c-age-gate-inner {
+  display: flex !important; align-items: center !important; gap: 10px !important;
+  font-family: Arial, Helvetica, sans-serif !important; font-size: 0.88rem !important;
+  flex-wrap: wrap !important;
+}
+.ao3c-age-gate-inner strong { color: #e65100 !important; }
+.ao3c-age-gate-inner span { flex: 1 !important; color: #555 !important; }
+.ao3c-age-gate-appeal {
+  background: transparent !important; border: 1.5px solid #ff6f00 !important;
+  border-radius: 4px !important; color: #e65100 !important; font-size: 0.75rem !important;
+  padding: 3px 10px !important; cursor: pointer !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+.ao3c-age-gate-full {
+  background: #fff3e0 !important; border: 3px solid #ff6f00 !important;
+  border-radius: 10px !important; padding: 36px 28px !important; text-align: center !important;
+  margin: 20px 0 !important;
+}
+.ao3c-age-gate-full-inner { max-width: 420px !important; margin: 0 auto !important; }
+
+/* ---- NAV COIN BALANCE ---- */
+.ao3c-nav-coins a { color: #f9a825 !important; font-weight: bold !important; }
+.ao3c-nav-coins a:hover { color: #f57f17 !important; }
+
+/* ---- COIN INPUT ROW ---- */
+.ao3c-donate-coin-row {
+  display: flex !important; align-items: center !important; gap: 8px !important;
+  margin: 6px 0 !important;
+}
+.ao3c-coin-input {
+  width: 80px !important; padding: 6px 8px !important; font-size: 0.9rem !important;
+  border: 1.5px solid #ddd !important; border-radius: 5px !important;
+  font-family: Arial, Helvetica, sans-serif !important; text-align: center !important;
+}
+.ao3c-coin-input:focus { outline: none !important; border-color: #43a047 !important; }
+.ao3c-task-pending {
+  font-size: 0.75rem !important; color: #888 !important; font-style: italic !important;
+}
+.ao3c-buy-btn {
+  background: #1565c0 !important; border: none !important; border-radius: 4px !important;
+  color: #fff !important; font-size: 0.78rem !important; padding: 5px 12px !important;
+  cursor: pointer !important; font-family: Arial, Helvetica, sans-serif !important;
+  font-weight: bold !important;
+}
+.ao3c-buy-btn:hover { opacity: 0.85 !important; }
