@@ -4,7 +4,33 @@ A lovingly terrible browser extension that adds the **worst possible features** 
 Inspired by the r/AO3 "worst possible AO3 features" meme post.
 
 ---
+##  Installation
 
+1. Download the .zip for your Browser
+2. Unzip/extract the .zip :)
+
+
+### Chrome / Chromium / Edge / Brave
+1. Open `chrome://extensions/`
+2. Enable **Developer Mode** (top right toggle)
+3. Click **"Load unpacked"**
+4. Select the `ao3-chaos-extension` folder
+5. Visit [archiveofourown.org](https://archiveofourown.org) and enjoy the chaos
+
+### Firefox
+
+
+1. Open `about:debugging#/runtime/this-firefox`
+2. Click **"Load Temporary Add-on..."**
+3. Select the `manifest.json` file inside the `ao3-chaos-extension` folder
+4. Visit [archiveofourown.org](https://archiveofourown.org) and enjoy the chaos
+
+**Note:** Temporary Firefox extensions are removed on browser restart.  
+
+---
+
+
+> For a permanent install, you'd need to sign it via [AMO](https://addons.mozilla.org/en-US/developers/).
 ## ✨ Features
 
 ### 🎰 Slot Machine Gambling Ads
@@ -36,30 +62,6 @@ Two extra nav items: "Verify your name" (enter your legal name, get told it's be
 
 ### 🖼️ Author Face ID
 Individual work pages show a "Author Face ID" in the metadata with a randomly assigned face and a confidence percentage.
-
----
-
-## 🔧 Installation
-
-### Chrome / Chromium / Edge / Brave
-
-1. **Rename** `manifest_chrome.json` → `manifest.json`
-2. Open `chrome://extensions/`
-3. Enable **Developer Mode** (top right toggle)
-4. Click **"Load unpacked"**
-5. Select the `ao3-chaos-extension` folder
-6. Visit [archiveofourown.org](https://archiveofourown.org) and enjoy the chaos
-
-### Firefox
-
-1. **Rename** `manifest_firefox.json` → `manifest.json`
-2. Open `about:debugging#/runtime/this-firefox`
-3. Click **"Load Temporary Add-on..."**
-4. Select the `manifest.json` file inside the `ao3-chaos-extension` folder
-5. Visit [archiveofourown.org](https://archiveofourown.org) and enjoy the chaos
-
-> **Note:** Temporary Firefox extensions are removed on browser restart.  
-> For a permanent install, you'd need to sign it via [AMO](https://addons.mozilla.org/en-US/developers/).
 
 ---
 
